@@ -3,26 +3,36 @@ console.log("in background script")
 let defaultDuration = 1.0;
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
-    console.log(alarm)
-    chrome.notifications.create("my notification", {
-        type: "basic",
-        iconUrl: "./images/icon.png",
-        title: "Time to dekr",
-        "message": "la ilaha illa lah"
-    }, function (notificationID) {
-        console.log("displayed the notification")
-    })
+    console.log(alarm);
+    const url = "https://ayah.nawafdev.com/api/dekr?types=random"
+    fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+            const dekr = data.content;
+            const category = data.category
+            chrome.notifications.create("my notification", {
+                type: "basic",
+                iconUrl: "./images/icon.png",
+                title: "",
+                message: dekr,
+                eventTime: Date.now() + 50000,
+            }, function (notificationID) {
+                console.log("displayed the notification");
+            });
+        })
+        .catch((error) => console.error(error));
 });
 
+
 function createAlarm() {
-    chrome.alarms.create("drink water", { delayInMinutes: defaultDuration });
+    chrome.alarms.create("dekr-reminder", { delayInMinutes: defaultDuration });
 }
 
 createAlarm()
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        console.log("Event recieved in background page");
+        console.log("Event recieved in background page " + request.minutes);
         defaultDuration = request.minutes * 1.0;
         createAlarm()
         sendResponse({ success: true });
@@ -40,7 +50,7 @@ chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
 
 chrome.omnibox.setDefaultSuggestion({ description: "Default suggestion here" })
 
-chrome.storage.sync.set({ Name: "Stuart" }, function () {
+chrome.storage.sync.set({ Name: "hoceine" }, function () {
     // when set runs
     console.log("value is set");
 
@@ -49,13 +59,3 @@ chrome.storage.sync.set({ Name: "Stuart" }, function () {
     })
 })
 
-chrome.contextMenus.create({
-    "id": "Some id",
-    "title": "My Context Menu",
-    "contexts": ["page"]
-})
-
-chrome.contextMenus.onClicked.addListener(function (clickData, tab) {
-    console.log(clickData)
-    console.log(tab)
-})

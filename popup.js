@@ -1,22 +1,9 @@
-// function fetchAndDisplayDekr() {
-//     fetch("https://ayah.nawafdev.com/api/dekr?types=m")
-//         .then((response) => response.json())
-//         .then((data) => {
-//             const dekrContainer = document.getElementById("dekr-container");
-//             dekrContainer.innerHTML = `${data.content}`;
-//         })
-//         .catch((error) => console.error(error));
-// }
-
-// fetchAndDisplayDekr();
-// setInterval(fetchAndDisplayDekr, 30000); // Refresh every 30 seconds
-// add event listener on button
-
-// grab the value from input
-// create an alarm for that value
 
 document.getElementById("add").addEventListener("click", remind);
+const adkarTypeSelect = document.getElementById("adkarType");
 
+// Get the selected value
+const selectedAdkarType = adkarTypeSelect.value;
 function remind() {
     const minutes = parseInt(document.getElementById("num").value);
 

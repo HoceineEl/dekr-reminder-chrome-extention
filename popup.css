@@ -1,13 +1,35 @@
 body {
     margin: 20px;
     text-align: center;
+    border-radius: 20px;
 }
 
 input {
     margin-top: 10px;
     margin-bottom: 20px;
+    padding-inline: 20px;
+    padding-block: 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: large;
+    border-color: #0fe697 #0fe697;
 }
 
 button {
     margin-bottom: 10px;
+    padding-inline: 20px;
+    padding-block: 8px;
+    border-radius: 10px;
+    color: whitesmoke;
+    font-weight: bold;
+    background-color: #0fe697;
+    border: 0;
+}
+
+button:hover {
+    background-color: #0aab70;
+}
+
+h1 {
+    color: #0aab70;
 }
