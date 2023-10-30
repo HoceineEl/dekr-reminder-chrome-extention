@@ -12,7 +12,7 @@
         "default_popup": "popup.html"
     },
     "host_permissions": [
-        "https://ayah.nawafdev.com/*"
+        "https://ayah.nawafdev.com/api/dekr?types=m"
     ],
     "background": {
         "service_worker": "background.js",

@@ -1,40 +1,66 @@
 console.log("in background script");
 
+// Initialize default values
 let defaultDuration = 1.0;
 let dekrType = "random";
 
-chrome.alarms.onAlarm.addListener(function (alarm) {
-    console.log(alarm);
-    const url = "https://ayah.nawafdev.com/api/dekr?types=" + dekrType;
-    console.log(url);
-    fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-            const dekr = data.content;
-            const category = data.category;
-            chrome.notifications.create("my-notification", {
-                type: "basic",
-                iconUrl: "./images/icon.png",
-                title: dekrType === "random" ? "Daily Dekr" : category,
-                message: dekr,
-                eventTime: Date.now() + 50000,
-            }, function (notificationID) {
-                console.log("Displayed the notification");
-            });
-        })
-        .catch((error) => console.error(error));
+chrome.runtime.onInstalled.addListener(async ({ reason }) => {
+    if (reason !== 'install') {
+        return;
+    }
+
+    // Set initial values in Chrome storage
+    chrome.storage.sync.set({ dekrType, minutes: defaultDuration }, function () {
+        console.log("Values saved to storage for the first time.");
+    });
 });
 
 function createAlarm() {
-    chrome.alarms.create("dekr-reminder", { delayInMinutes: defaultDuration });
+    // Fetch values from Chrome storage and create the alarm
+    chrome.storage.sync.get(["dekrType", "minutes"], function (data) {
+        dekrType = data.dekrType || "random";
+        defaultDuration = data.minutes || 1;
+        chrome.alarms.create("dekr-reminder", { periodInMinutes: defaultDuration });
+    });
 }
 
 createAlarm();
 
+chrome.alarms.onAlarm.addListener(function (alarm) {
+    // Fetch values from Chrome storage before making the request
+    chrome.storage.sync.get(["dekrType"], function (data) {
+        dekrType = data.dekrType || "random";
+
+        const url = "https://ayah.nawafdev.com/api/dekr?types=" + dekrType;
+        console.log(url);
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                let dekr = data.content;
+                let category = data.category;
+                chrome.notifications.create("my-notification", {
+                    type: "basic",
+                    iconUrl: "./images/icon.png",
+                    title: dekrType === "random" ? "" : category,
+                    message: dekr,
+                    eventTime: Date.now() + 50000,
+                }, function (notificationID) {
+                    console.log("Displayed the notification");
+                });
+            })
+            .catch((error) => console.error(error));
+    });
+});
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    // Update values in Chrome storage when a message is received
     defaultDuration = request.minutes * 1.0;
     dekrType = request.dekrType;
-    console.log("Event received in the background page. Minutes: " + request.minutes + " Dekr Type: " + dekrType);
+
+    chrome.storage.sync.set({ dekrType, minutes: defaultDuration }, function () {
+        console.log("Values saved to storage.");
+    });
+
     createAlarm();
     sendResponse({ success: true });
 });
@@ -50,10 +76,3 @@ chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
 });
 
 chrome.omnibox.setDefaultSuggestion({ description: "Default suggestion here" });
-
-chrome.storage.sync.set({ Name: "hoceine" }, function () {
-    console.log("Value is set");
-    chrome.storage.sync.get(['Name'], function (result) {
-        console.log(result);
-    });
-});
