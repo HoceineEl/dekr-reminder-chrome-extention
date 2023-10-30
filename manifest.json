@@ -1,0 +1,27 @@
+{
+    "manifest_version": 3,
+    "version": "1.0.0",
+    "name": "Dekr Reminder",
+    "description": "adkar reminder",
+    "icons": {
+        "16": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "permissions": [
+        "alarms",
+        "notifications",
+        "storage",
+        "contextMenus"
+    ],
+    "omnibox": {
+        "keyword": "stuart"
+    }
+}
