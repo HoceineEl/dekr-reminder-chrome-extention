@@ -12,14 +12,19 @@
     <div class="container">
         <img src="./images/icon.png" alt="adkari icon" width="80">
         <h1>Adkari Reminder</h1>
-        <p>Select the type of Adkar:</p>
+        <p>Select the type of Adkar</p>
         <select id="adkarType">
-            <option value="sabah">Adkar Sabah</option>
-            <option value="masa">Adkar Masa</option>
-            <option value="prophet">Prophet's Duas</option>
+            <option value="random" selected>ذكر عشوائي</option>
+            <option value="m">أذكار الصباح</option>
+            <option value="t">أذكار المساء</option>
+            <option value="qd">أدعية قرآنية</option>
+            <option value="pd">أدعية الأنبياء</option>
+            <option value="prophet">تسابيح و اذكار عشوائية</option>
+            <option value="bs">أذكار قبل النوم</option>
+            <option value="wu">أذكار الاستيقاظ</option>
         </select>
-        <p>Set your reminder interval:</p>
-        <input type=" number" id="num" min="1" placeholder="Interval in minutes">
+        <p>Set your reminder interval</p>
+        <input type=" number" value="1" id="num" min="1" placeholder="Interval in minutes">
         <button id="add">Remind Me</button>
     </div>
 

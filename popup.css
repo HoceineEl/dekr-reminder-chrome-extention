@@ -4,7 +4,8 @@ body {
     border-radius: 20px;
 }
 
-input {
+input,
+select {
     margin-top: 10px;
     margin-bottom: 20px;
     padding-inline: 20px;
@@ -13,6 +14,16 @@ input {
     font-weight: bold;
     font-size: large;
     border-color: #0fe697 #0fe697;
+}
+
+input:focus,
+select:focus {
+    border-color: #0fe697;
+}
+
+p {
+    font-weight: 600;
+    font-size: 16px;
 }
 
 button {
@@ -24,10 +35,14 @@ button {
     font-weight: bold;
     background-color: #0fe697;
     border: 0;
+    cursor: pointer;
+
 }
 
 button:hover {
     background-color: #0aab70;
+    transform: scale(1.05);
+    transition: transform 1s;
 }
 
 h1 {

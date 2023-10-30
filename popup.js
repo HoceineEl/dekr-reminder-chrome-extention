@@ -1,17 +1,17 @@
 
 document.getElementById("add").addEventListener("click", remind);
-const adkarTypeSelect = document.getElementById("adkarType");
 
-// Get the selected value
-const selectedAdkarType = adkarTypeSelect.value;
+
 function remind() {
+    const adkarTypeSelect = document.getElementById("adkarType");
+    const dekrType = adkarTypeSelect.value;
     const minutes = parseInt(document.getElementById("num").value);
 
     if (isNaN(minutes)) {
         console.log("It's not a number");
     } else {
         console.log(minutes);
-        chrome.runtime.sendMessage({ minutes }, function (response) {
+        chrome.runtime.sendMessage({ minutes, dekrType }, function (response) {
             console.log(response);
         });
     }
