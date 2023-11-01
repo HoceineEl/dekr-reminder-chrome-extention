@@ -1,50 +1,110 @@
 body {
-    margin: 20px;
     text-align: center;
-    border-radius: 20px;
+    background: linear-gradient(55deg, #7f52e9, #0fe697);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    width: 450px;
+}
+
+.container {
+    padding: 30px;
+    border-radius: 60px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.621);
+    transition: transform 0.5s ease-in-out;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 input,
 select {
     margin-top: 10px;
     margin-bottom: 20px;
-    padding-inline: 20px;
-    padding-block: 6px;
+    padding: 10px 20px;
     border-radius: 10px;
     font-weight: bold;
     font-size: large;
-    border-color: #0fe697 #0fe697;
+    border: 2px solid #0fe697;
+
+    color: #575857;
+}
+
+.input {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.input span {
+    color: #575857;
+    font-size: large;
+    font-weight: bold;
 }
 
 input:focus,
 select:focus {
+
     border-color: #0fe697;
+    outline-color: #0fe697;
 }
 
 p {
     font-weight: 600;
     font-size: 16px;
+    color: #424946;
 }
 
 button {
     margin-bottom: 10px;
-    padding-inline: 20px;
-    padding-block: 8px;
+    padding: 8px 20px;
     border-radius: 10px;
     color: whitesmoke;
     font-weight: bold;
-    background-color: #0fe697;
-    border: 0;
+    background: linear-gradient(55deg, #7f52e9, #0fe697);
+    border: none;
     cursor: pointer;
+    transition: all 1s, transform 0.5s;
 
 }
 
+
+
 button:hover {
-    background-color: #0aab70;
-    transform: scale(1.05);
-    transition: transform 1s;
+
+    transform: scale(1.02);
+
 }
 
 h1 {
     color: #0aab70;
+    font-weight: bolder;
+    background: linear-gradient(55deg, #7f52e9, #0fe697);
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.infos {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+}
+
+.infos a {
+    transition: transform 1s;
+}
+
+.infos a:hover {
+    transform: scale(1.1);
 }

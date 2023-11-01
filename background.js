@@ -67,12 +67,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 // Omnibox (Optional)
 
-chrome.omnibox.onInputChanged.addListener(function (text, suggest) {
-    console.log(text);
-    suggest([
-        { content: "First content", description: "First desc" },
-        { content: "Second Content", description: "Second Desc" }
-    ]);
-});
-
-chrome.omnibox.setDefaultSuggestion({ description: "Default suggestion here" });

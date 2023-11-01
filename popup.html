@@ -10,22 +10,34 @@
 
 <body>
     <div class="container">
+
         <img src="./images/icon.png" alt="adkari icon" width="80">
         <h1>Adkari Reminder</h1>
         <p>Select the type of Adkar</p>
         <select id="adkarType">
-            <option value="random" selected>ذكر عشوائي</option>
+            <option value="random " selected>ذكر عشوائي</option>
             <option value="m">أذكار الصباح</option>
             <option value="e">أذكار المساء</option>
             <option value="qd">أدعية قرآنية</option>
             <option value="pd">أدعية الأنبياء</option>
-            <option value="t">تسابيح و اذكار عشوائية</option>
+            <option value="t">تسابيح و اذكار </option>
             <option value="bs">أذكار قبل النوم</option>
             <option value="wu">أذكار الاستيقاظ</option>
         </select>
         <p>Set your reminder interval</p>
-        <input type=" number" id="num" min="1" placeholder="Interval in minutes">
+        <div class="input"><input type=" number" id="num" min="1" placeholder="Interval in minutes"><span>min</span>
+        </div>
         <button id="add">Remind Me</button>
+        <div class="infos">
+
+            <a href="https://hoceine.vercel.app" target="_blank"><img width="35" src="./images/visit.png"
+                    alt="Hoceine el idrissi's personal portfolio"></a>
+            <a href="https://github.com/hoceineel" target="_blank"><img width="35" src="./images/github.png"
+                    alt="Hoceine el idrissi's github profile"></a>
+            <a href="https://linkedin.com/in/elidrissihoceine" target="_blank"><img width="35"
+                    src="./images/linkedin.png" alt="Hoceine el idrissi's linkedin profile"></a>
+
+        </div>
     </div>
 
     <script src="popup.js"></script>

@@ -24,7 +24,7 @@
         "storage",
         "contextMenus"
     ],
-    "omnibox": {
-        "keyword": "stuart"
+    "chrome_url_overrides": {
+        "newtab": "newtab/newtab.html"
     }
 }
