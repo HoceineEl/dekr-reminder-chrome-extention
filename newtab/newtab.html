@@ -5,14 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adkari | New Tab</title>
+
     <link rel="stylesheet" href="newtab.css">
 </head>
 
 <body>
-
+    <!-- <div class="loader"></div> -->
+    <div id="bg-color"></div>
     <div class="content">
-        <div class="ayah-content">
-            <p id="text">text</p>
+        <div class="ayah">
+            <h2>﴾<span id="surah-name"></span>﴿</h2>
+            <div class="ayah-content">
+                <p id="text">text</p>
+                <div class="fake-player">
+                    <button role="play" class="play"></button>
+                    <button role="pause" class="pause hidden"></button>
+                </div>
+                <div class="tooltip" id="toggleTafseer">
+                    <img src="./images/show-more.png" width="30" alt="show more /less">
+                    <div class="tooltiptext">Show Tafseer</div>
+                </div>
+
+                <div class="tafseer-container hidden-tafseer">
+                    <p id="tafseer"></p>
+                </div>
+            </div>
+
         </div>
     </div>
 

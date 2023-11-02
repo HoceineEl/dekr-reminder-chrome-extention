@@ -8,7 +8,7 @@ body {
 
 .container {
     padding: 30px;
-    border-radius: 60px;
+    border-radius: 80px;
     background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.621);
     transition: transform 0.5s ease-in-out;
@@ -25,7 +25,7 @@ body {
     }
 }
 
-input,
+
 select {
     margin-top: 10px;
     margin-bottom: 20px;
@@ -34,24 +34,33 @@ select {
     font-weight: bold;
     font-size: large;
     border: 2px solid #0fe697;
-
     color: #575857;
 }
 
 .input {
-    display: flex;
-    justify-items: center;
-    align-items: center;
-    gap: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #575857;
+    margin-block: 15px;
 }
 
-.input span {
+.input input {
     color: #575857;
+    border-bottom: 2px solid gray;
+    border-inline: none;
+    border-top: none;
     font-size: large;
     font-weight: bold;
+    width: 30px;
+    background: transparent;
+    padding-left: 10px;
 }
 
-input:focus,
+.input input:focus {
+    outline: none;
+}
+
 select:focus {
 
     border-color: #0fe697;

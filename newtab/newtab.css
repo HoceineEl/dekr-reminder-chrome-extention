@@ -1,3 +1,9 @@
+:root {
+    --button-height: 15px;
+    --button-color: #3fde8f;
+    --transition-duration: 0.8s;
+}
+
 @font-face {
     font-family: 'quran';
     src: url('./fonts/_PDMS_Saleem_QuranFont.ttf') format('truetype');
@@ -11,39 +17,256 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /* This prevents scrollbars */
+    animation: fadeOut 2s forwards;
+}
+
+
+
+@keyframes fadeOut {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#bg-color {
+    width: 100%;
+    height: 100%;
+    background-color: #0e906d5e;
+    position: absolute;
+    inset: 0;
 }
 
 body {
-
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+    animation: bgZoom 60s linear infinite;
+}
+
+@keyframes bgZoom {
+    0% {
+        background-size: 100%;
+    }
+
+    100% {
+        background-size: 140%;
+    }
 }
 
 .content {
     width: 100%;
     height: 100%;
     position: relative;
+    transition: all 3s ease;
+}
+
+.ayah-content #text::before {
+    content: "﴾";
+    margin-right: 10px;
+}
+
+.ayah-content #text::after {
+    content: "﴿";
+    margin-left: 10px;
 }
 
 .ayah-content #text {
-
     text-align: center;
-    font-size: 30px;
-    color: aliceblue;
+    font-size: 36px;
+    color: rgb(200, 222, 216);
     text-indent: 20px;
     word-spacing: 5px;
-    font-family: 'quran', sans-serif;
 }
 
 .ayah-content {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    font-family: 'quran', sans-serif;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
     padding: 20px 35px;
     backdrop-filter: blur(30px);
     border-radius: 30px;
+    animation: 400ms ease-out 400ms 1 normal both running ayah-display;
+}
+
+.ayah {
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translate(-50%, -50%);
+    font-family: 'quran', sans-serif;
+}
+
+
+.ayah h2 {
+    margin-inline: 5px;
+    text-align: center;
+    margin-block: 15px;
+    font-size: 46px;
+    color: rgb(212, 220, 220);
+}
+
+@keyframes ayah-display {
+    0% {
+        opacity: 0;
+
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+
+.fake-player {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+    border: 0.2rem solid var(--button-color);
+    border-radius: 50%;
+    filter: drop-shadow(0 0 3.1rem rgba(255, 255, 255, 0.8));
+    transition: all var(--transition-duration) ease;
+    /* Smooth transition for all properties */
+}
+
+button {
+    margin: 0;
+    padding: 0;
+}
+
+.play {
+    height: 0;
+    width: 0;
+    margin-left: calc(2 * 0.14 * var(--button-height));
+    background: none;
+    border: none;
+    border-top: var(--button-height) solid transparent;
+    border-bottom: var(--button-height) solid transparent;
+    border-left: calc(var(--button-height) * 2 * 0.86) solid var(--button-color);
+    transition: all var(--transition-duration) ease;
+    /* Smooth transition for all properties */
+}
+
+.pause {
+    position: relative;
+    background: none;
+    border: none;
+    height: calc(var(--button-height) * 2);
+    width: calc(var(--button-height) * 2 * 0.86);
+    transition: all var(--transition-duration) ease;
+    /* Smooth transition for all properties */
+}
+
+.pause::after,
+.pause::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 33%;
+    background: var(--button-color);
+    transition: all var(--transition-duration) ease;
+    /* Smooth transition for background color */
+}
+
+.pause::before {
+    left: 0;
+}
+
+.pause::after {
+    right: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.tafseer-container {
+    margin-top: 20px;
+    text-align: center;
+    max-width: 600px;
+    height: fit-content;
+    max-height: 500px;
+    transition: all var(--transition-duration) ease-in;
+}
+
+#tafseer {
+    line-height: 25px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 20px;
+    color: rgb(179, 231, 219);
+
+}
+
+.hidden-tafseer {
+    opacity: 0;
+    max-height: 0px;
+    transition: all var(--transition-duration) ease-in;
+}
+
+#toggleTafseer {
+    margin-top: 15px;
+}
+
+
+
+.toggle-up {
+    transition: transform var(--transition-duration) linear;
+    transform: rotate(180deg);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #e0edea;
+    color: #454545;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #e0edea transparent transparent transparent;
+}
+
+/* Show the tooltip on hover */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }
