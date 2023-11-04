@@ -1,146 +1,134 @@
 const body = document.body;
-
-// const format = window.innerWidth > 1400 ? "raw" : "regular"
-
-// const keywords = "nature,landscape"; // Specify the keyword as "nature"
-
-// const unsplashUrl = `https://api.unsplash.com/photos/random?page=1&query=${keywords}&client_id=dCpaD9oTx3ZEhfB0inDvHF01bN5btda7qkFWX5cQyjg&orientation=landscape&content_filter=high&featured=true&category=4`;
-
-// fetch(unsplashUrl)
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error("Network response was not ok");
-//         }
-//         return response.json();
-//     })
-//     .then(image => {
-
-//         body.style.backgroundImage = `url(${image.urls[format]})`;
-//         document.getElementById('bg-color').style.backgroundColor = `${image.color}8f`
-//     })
-//     .catch(error => {
-//         console.error("Fetch error:", error);
-//     });
-
-const imagesNumber = 11;
-const randomImage = Math.floor(Math.random() * imagesNumber) + 1;
+const imagesNumber = 18;
 let audio = null;
-
-body.style.backgroundImage = `url(images/${randomImage}.jpeg)`;
-
-const ayahTxt = document.getElementById("text");
-const surah = document.getElementById("surah-name");
-const randomAyah = Math.floor(Math.random() * 6236) + 1;
-const quranAyah = `http://api.alquran.cloud/v1/ayah/${randomAyah}/ar.alafasy`;
-const tafseerTxt = document.getElementById('tafseer')
-const tafseerContainer = document.querySelector('.tafseer-container')
 let currentAyahNumber = null;
-var tafseerDisplayed = false;
-// Function to fetch a random Quranic verse
-function fetchRandomAyah() {
-    const randomAyahNumber = Math.floor(Math.random() * 6236) + 1;
-    const randomQuranAyah = `http://api.alquran.cloud/v1/ayah/${randomAyahNumber}/ar.alafasy`;
+let tafseerDisplayed = false;
 
-    fetch(randomQuranAyah)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then((ayah) => {
-            if (ayah.data && ayah.data['text']) {
-                ayahTxt.textContent = ayah.data['text'];
-                surah.textContent = ayah.data.surah.name;
-                currentAyahNumber = randomAyahNumber;
-                audio = new Audio(ayah.data.audio);
-                audio.onended = fetchNextSequentialAyah;
-                getAyahTafseer(ayah.data.surah.number, ayah.data.numberInSurah)
-            }
-        })
-        .catch((error) => {
-            console.error("Fetch error:", error);
-        });
-}
-
-// Function to fetch the next sequential ayah
-function fetchNextSequentialAyah() {
-    if (currentAyahNumber !== null) {
-        const nextAyahNumber = currentAyahNumber + 1;
-        const nextQuranAyah = `http://api.alquran.cloud/v1/ayah/${nextAyahNumber}/ar.alafasy`;
-
-        fetch(nextQuranAyah)
-            .then((response) => {
-                if (!response.ok) {
-                    throw Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((ayah) => {
-                if (ayah.data && ayah.data['text']) {
-                    ayahTxt.textContent = ayah.data['text'];
-                    surah.textContent = ayah.data.surah.name;
-                    currentAyahNumber = nextAyahNumber; // Update the current ayah number
-                    audio = new Audio(ayah.data.audio);
-                    audio.play()
-                    audio.onended = fetchNextSequentialAyah;
-                    getAyahTafseer(ayah.data.surah.number, ayah.data.numberInSurah)
-                }
-            })
-            .catch((error) => {
-                console.error("Fetch error:", error);
-            });
+// Function to fetch data from an API
+async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Fetch error:", error);
+        throw error;
     }
 }
-function getAyahTafseer(surah, ayah) {
-    const tafseerUrl = `http://api.quran-tafseer.com/tafseer/1/${surah}/${ayah}`;
 
-    fetch(tafseerUrl)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
+// Function to fetch a random Quranic verse
+async function fetchRandomAyah() {
+    try {
+        const randomAyahNumber = Math.floor(Math.random() * 6236) + 1;
+        const randomQuranAyah = `http://api.alquran.cloud/v1/ayah/${randomAyahNumber}/ar.alafasy`;
+        const ayah = await fetchData(randomQuranAyah);
+
+        if (ayah.data && ayah.data.text) {
+            updateAyahData(ayah.data, randomAyahNumber);
+        }
+    } catch (error) {
+        console.error("Error fetching random ayah:", error);
+    }
+}
+
+// Function to update the displayed ayah data
+function updateAyahData(data, ayahNumber, isPlayed = false) {
+    const ayahTxt = document.getElementById("text");
+    const surah = document.getElementById("surah-name");
+    ayahTxt.textContent = data.text;
+    surah.textContent = data.surah.name;
+    currentAyahNumber = ayahNumber;
+    if (audio) {
+        audio.pause(); // Pause the current audio
+        audio = null; // Release the current audio instance
+    }
+    audio = new Audio(data.audio);
+    audio.onended = () => fetchSequentialAyah(true, true); // Automatically play the next ayah
+    if (isPlayed) audio.play()
+    getAyahTafseer(data.surah.number, data.numberInSurah);
+}
+
+// Function to fetch a sequential ayah
+async function fetchSequentialAyah(isNext, endeed = false) {
+    if (audio) {
+
+        const direction = isNext ? 1 : -1;
+        const newAyahNumber = currentAyahNumber + direction;
+        const newQuranAyah = `http://api.alquran.cloud/v1/ayah/${newAyahNumber}/ar.alafasy`;
+
+        try {
+            const ayah = await fetchData(newQuranAyah);
+
+            if (ayah.data && ayah.data.text) {
+                updateAyahData(ayah.data, newAyahNumber, !audio.paused || endeed);
             }
-            return response.json();
-        })
-        .then((tafseer) => {
-            if (tafseer.text)
-                tafseerTxt.textContent = tafseer.text
-
-        })
-        .catch((error) => {
-            console.error("Fetch error:", error);
-        });
+        } catch (error) {
+            console.error(`Error fetching ${isNext ? "next" : "previous"} ayah:`, error);
+        }
+    }
 }
 
-fetchRandomAyah();
-
-
-
-
-const player = document.querySelector('.fake-player');
-
-function clickHandler() {
-    audio && audio.paused ? audio.play() : audio.pause();
-    player.querySelector('.play').classList.toggle('hidden');
-    player.querySelector('.pause').classList.toggle('hidden');
+// Function to fetch and display tafseer for the current ayah
+async function getAyahTafseer(surah, ayah) {
+    const tafseerUrl = `http://api.quran-tafseer.com/tafseer/1/${surah}/${ayah}`;
+    try {
+        const tafseer = await fetchData(tafseerUrl);
+        if (tafseer.text) {
+            const tafseerTxt = document.getElementById('tafseer');
+            tafseerTxt.textContent = tafseer.text;
+        }
+    } catch (error) {
+        console.error("Error fetching tafseer:", error);
+    }
 }
 
+// Initialize the background image
+function initBackgroundImage() {
+    const randomImage = Math.floor(Math.random() * imagesNumber) + 1;
+    body.style.backgroundImage = `url(images/${randomImage}.jpeg)`;
+}
+
+// Event listener for background image initialization
+window.addEventListener('load', initBackgroundImage);
+
+// Event listeners for navigation buttons
+const next = document.getElementById('next');
+const previous = document.getElementById('previous');
+next.addEventListener('click', () => fetchSequentialAyah(true));
+previous.addEventListener('click', () => fetchSequentialAyah(false));
+
+// Event listener for play/pause button
+const player = document.querySelector('.play-pause');
+player.addEventListener('click', () => {
+    if (audio) {
+        audio.paused ? audio.play() : audio.pause();
+        player.querySelector('.play').classList.toggle('hidden');
+        player.querySelector('.pause').classList.toggle('hidden');
+    }
+})
+
+// Event listener for showing/hiding tafseer
 document.getElementById('toggleTafseer').addEventListener('click', (e) => {
     tafseerDisplayed = !tafseerDisplayed;
     e.target.classList.toggle('toggle-down');
     e.target.classList.toggle('toggle-up');
     document.querySelector('.tooltiptext').textContent = tafseerDisplayed ? "Hide Tafseer" : "Show Tafseer";
+    const tafseerContainer = document.querySelector('.tafseer-container');
     tafseerContainer.classList.toggle('hidden-tafseer');
 });
 
-player.addEventListener('click', clickHandler);
+// Event listener for space bar key to toggle play/pause
 document.body.onkeyup = function (e) {
-    if (e.key == " " ||
-        e.code == "Space" ||
-        e.keyCode == 32
-    ) {
-        clickHandler()
-
+    if (e.key == " " || e.code == "Space" || e.keyCode == 32) {
+        if (audio) {
+            audio.paused ? audio.play() : audio.pause();
+            player.querySelector('.play').classList.toggle('hidden');
+            player.querySelector('.pause').classList.toggle('hidden');
+        }
     }
-}
+};
 
+// Initial fetch of a random ayah
+fetchRandomAyah();

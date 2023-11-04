@@ -10,17 +10,21 @@
 </head>
 
 <body>
-    <!-- <div class="loader"></div> -->
     <div id="bg-color"></div>
     <div class="content">
         <div class="ayah">
             <h2>﴾<span id="surah-name"></span>﴿</h2>
             <div class="ayah-content">
                 <p id="text">text</p>
-                <div class="fake-player">
-                    <button role="play" class="play"></button>
-                    <button role="pause" class="pause hidden"></button>
+                <div class="player">
+                    <div id="next"><img src="./images/next.png" width="30" alt=""></div>
+                    <div class="play-pause">
+                        <button role="play" class="play"></button>
+                        <button role="pause" class="pause hidden"></button>
+                    </div>
+                    <div id="previous"><img src="./images/previous.png" width="30" alt=""></div>
                 </div>
+
                 <div class="tooltip" id="toggleTafseer">
                     <img src="./images/show-more.png" width="30" alt="show more /less">
                     <div class="tooltiptext">Show Tafseer</div>

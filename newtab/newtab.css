@@ -14,9 +14,11 @@
 html,
 body {
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
+    background-color: #000000;
     animation: fadeOut 2s forwards;
 }
 
@@ -35,15 +37,16 @@ body {
 #bg-color {
     width: 100%;
     height: 100%;
-    background-color: #0e906d5e;
+    background-color: #3f434296;
     position: absolute;
     inset: 0;
 }
 
 body {
-    background-position: center;
-    background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
     position: relative;
     animation: bgZoom 60s linear infinite;
 }
@@ -66,13 +69,13 @@ body {
 }
 
 .ayah-content #text::before {
-    content: "﴾";
-    margin-right: 10px;
+    content: "﴿";
+    margin-left: 10px;
 }
 
 .ayah-content #text::after {
-    content: "﴿";
-    margin-left: 10px;
+    content: "﴾";
+    margin-right: 10px;
 }
 
 .ayah-content #text {
@@ -81,6 +84,16 @@ body {
     color: rgb(200, 222, 216);
     text-indent: 20px;
     word-spacing: 5px;
+    direction: rtl;
+}
+
+@media (width < 1024px) {
+    .ayah-content #text {
+        font-size: 26px;
+        text-indent: 17px;
+        word-spacing: 3px;
+    }
+
 }
 
 .ayah-content {
@@ -117,6 +130,13 @@ body {
     color: rgb(212, 220, 220);
 }
 
+@media (width < 1024px) {
+
+    .ayah h2 {
+        font-size: 30px;
+    }
+}
+
 @keyframes ayah-display {
     0% {
         opacity: 0;
@@ -130,18 +150,38 @@ body {
 
 
 
-.fake-player {
+.play-pause {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     width: 30px;
     height: 30px;
+    opacity: 0.7;
     padding: 15px;
     border: 0.2rem solid var(--button-color);
     border-radius: 50%;
     filter: drop-shadow(0 0 3.1rem rgba(255, 255, 255, 0.8));
     transition: all var(--transition-duration) ease;
     /* Smooth transition for all properties */
+}
+
+.play-pause:hover {
+    opacity: 1;
+    scale: 1.01;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+
+
+#previous,
+#next {
+    cursor: pointer;
 }
 
 button {
@@ -210,7 +250,15 @@ button {
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
     color: rgb(179, 231, 219);
+}
 
+@media (width < 1024px) {
+    #tafseer {
+        line-height: 25px;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 16px;
+        color: rgb(179, 231, 219);
+    }
 }
 
 .hidden-tafseer {
@@ -221,6 +269,7 @@ button {
 
 #toggleTafseer {
     margin-top: 15px;
+    cursor: pointer;
 }
 
 
