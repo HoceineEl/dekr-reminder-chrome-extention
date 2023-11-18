@@ -13,7 +13,7 @@ async function fetchData(url) {
         }
         return response.json();
     } catch (error) {
-        console.error("Fetch error:", error);
+        setAyatAlkursi()
         throw error;
     }
 }
@@ -87,7 +87,7 @@ async function getAyahTafseer(surah, ayah) {
 // Initialize the background image
 function initBackgroundImage() {
     const randomImage = Math.floor(Math.random() * imagesNumber) + 1;
-    body.style.backgroundImage = `url(images/${randomImage}.jpeg)`;
+    document.querySelector(".content").style.backgroundImage = `url(images/${randomImage}.jpeg)`;
 }
 
 // Event listener for background image initialization
@@ -129,6 +129,10 @@ document.body.onkeyup = function (e) {
         }
     }
 };
-
+function setAyatAlkursi() {
+    document.getElementById("text").textContent = "ٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ ٢٥٥";
+    document.getElementById("surah-name").textContent = "سورة البقرة";
+    document.getElementById("tafseer").textContent = "الله الذي لا يستحق الألوهية والعبودية إلا هو، الحيُّ الذي له جميع معاني الحياة الكاملة كما يليق بجلاله، القائم على كل شيء، لا تأخذه سِنَة أي: نعاس، ولا نوم، كل ما في السماوات وما في الأرض ملك له، ولا يتجاسر أحد أن يشفع عنده إلا بإذنه، محيط علمه بجميع الكائنات ماضيها وحاضرها ومستقبلها، يعلم ما بين أيدي الخلائق من الأمور المستقبلة، وما خلفهم من الأمور الماضية، ولا يَطَّلعُ أحد من الخلق على شيء من علمه إلا بما أعلمه الله وأطلعه عليه. وسع كرسيه السماوات والأرض، والكرسي: هو موضع قدمي الرب -جل جلاله- ولا يعلم كيفيته إلا الله سبحانه، ولا يثقله سبحانه حفظهما، وهو العلي بذاته وصفاته على جميع مخلوقاته، الجامع لجميع صفات العظمة والكبرياء. وهذه الآية أعظم آية في القرآن، وتسمى: (آية الكرسي). ";
+}
 // Initial fetch of a random ayah
 fetchRandomAyah();

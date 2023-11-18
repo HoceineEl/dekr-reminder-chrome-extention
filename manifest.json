@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "version": "1.0.0",
-    "name": "Adkari",
+    "name": "Remind Me | ذكرني",
     "description": "Stay connected to Allah in every moment of your day.",
     "icons": {
         "16": "images/icon.png",
@@ -9,7 +9,12 @@
         "128": "images/icon.png"
     },
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "images/icon.png",
+            "48": "images/icon.png",
+            "128": "images/icon.png"
+        }
     },
     "host_permissions": [
         "https://ayah.nawafdev.com/api/dekr?types=m"
