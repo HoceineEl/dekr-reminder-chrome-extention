@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
     }
 
     // Set initial values in Chrome storage
-    chrome.storage.sync.set({ dekrType, minutes: defaultDuration }, function () {
+    chrome.storage.sync.set({ dekrType, minutes: defaultDuration, newTab: true }, function () {
         console.log("Values saved to storage for the first time.");
     });
 });
@@ -54,16 +54,21 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     // Update values in Chrome storage when a message is received
-    defaultDuration = request.minutes * 1.0;
-    dekrType = request.dekrType;
+    if (request.minutes !== undefined) {
+        defaultDuration = request.minutes * 1.0;
+        dekrType = request.dekrType;
 
-    chrome.storage.sync.set({ dekrType, minutes: defaultDuration }, function () {
-        console.log("Values saved to storage.");
-    });
+        chrome.storage.sync.set({ dekrType, minutes: defaultDuration }, function () {
+            console.log("Values saved to storage.");
+        });
 
-    createAlarm();
-    sendResponse({ success: true });
+        createAlarm();
+        sendResponse({ success: true });
+    }
 });
+let overrideNewTab = true; // Initial state
 
-// Omnibox (Optional)
+
+
+
 

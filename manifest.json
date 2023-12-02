@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "version": "1.0.0",
+    "version": "1.0.1",
     "name": "Remind Me | ذكرني",
     "description": "Stay connected to Allah in every moment of your day.",
     "icons": {
@@ -26,8 +26,7 @@
     "permissions": [
         "alarms",
         "notifications",
-        "storage",
-        "contextMenus"
+        "storage"
     ],
     "chrome_url_overrides": {
         "newtab": "newtab/newtab.html"

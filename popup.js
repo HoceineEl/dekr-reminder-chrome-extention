@@ -1,22 +1,4 @@
 
-// document.getElementById("add").addEventListener("click", remind);
-
-
-// function remind() {
-//     const adkarTypeSelect = document.getElementById("adkarType");
-//     const dekrType = adkarTypeSelect.value;
-//     const minutes = parseInt(document.getElementById("num").value);
-
-//     if (isNaN(minutes)) {
-//         console.log("It's not a number");
-//     } else {
-//         console.log(minutes);
-//         chrome.runtime.sendMessage({ minutes, dekrType }, function (response) {
-//             console.log(response);
-//         });
-//     }
-
-// }
 document.addEventListener("DOMContentLoaded", function () {
     // Load stored values from Chrome storage and set them as defaults if available
     chrome.storage.sync.get(["dekrType", "minutes"], function (data) {
@@ -30,11 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.minutes) {
             numInput.value = data.minutes;
         }
+
     });
 
     document.getElementById("add").addEventListener("click", remind);
-});
 
+
+
+});
 function remind() {
     const adkarTypeSelect = document.getElementById("adkarType");
     const dekrType = adkarTypeSelect.value;
@@ -54,3 +39,4 @@ function remind() {
         });
     }
 }
+
