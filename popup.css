@@ -228,3 +228,178 @@ body {
 .footer a:hover {
   opacity: 1;
 }
+
+/* Dark Mode Toggle */
+.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.theme-switch {
+  display: inline-block;
+  height: 24px;
+  position: relative;
+  width: 44px;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: 0.4s;
+}
+
+.slider:before {
+  background-color: #fff;
+  bottom: 4px;
+  content: "";
+  height: 16px;
+  left: 4px;
+  position: absolute;
+  transition: 0.4s;
+  width: 16px;
+}
+
+input:checked + .slider {
+  background-color: #1a73e8;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  --background-color: #202124;
+  --card-background: #303134;
+  --text-color: #e8eaed;
+  --subtle-text: #969ba1;
+  --border-color: #5f6368;
+}
+
+body.dark-mode .custom-select-trigger {
+  background: var(--card-background);
+  border-color: var(--border-color);
+}
+
+body.dark-mode .custom-option:hover {
+  background-color: #3c4043;
+}
+body.dark-mode .custom-option.selected {
+  background-color: #3c4043;
+  color: #8ab4f8;
+}
+
+body.dark-mode .input-stepper button {
+  background: #3c4043;
+  color: #8ab4f8;
+}
+body.dark-mode .input-stepper button:hover {
+  background: #5f6368;
+}
+
+body.dark-mode .footer a {
+  opacity: 0.8;
+}
+
+body.dark-mode .footer a:hover {
+  opacity: 1;
+}
+
+/* Tracker Card */
+.tracker-card {
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 15px 20px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
+.tracker-count {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-align: center;
+}
+
+/* New Reminder Card Header */
+.card-header-with-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+#reminder-controls {
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  overflow: hidden;
+}
+
+#reminder-controls.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  max-height: 0;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--subtle-text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-button.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+.tab-content .tab-pane {
+  display: none;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tab-content .tab-pane.active {
+  display: flex;
+}
+
+.tab-pane .card,
+.tab-pane .tracker-card,
+.tab-pane .dnd-card,
+.tab-pane .custom-reminder-card {
+  width: 100%;
+}

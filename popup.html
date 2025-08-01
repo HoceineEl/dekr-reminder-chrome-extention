@@ -13,44 +13,99 @@
         <h1>ذكرني</h1>
       </div>
 
-      <div class="card">
-        <p class="card-title">Select the type of Adkar</p>
-        <div class="custom-select-wrapper">
-          <div class="custom-select">
-            <div class="custom-select-trigger">
-              <span>ذكر عشوائي</span>
-              <div class="arrow"></div>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="reminder-tab">
+          Reminder
+        </button>
+        <button class="tab-button" data-tab="tracker-tab">Tracker</button>
+      </div>
+
+      <div class="tab-content">
+        <div id="reminder-tab" class="tab-pane active">
+          <div class="card">
+            <div class="card-header-with-toggle">
+              <p class="card-title">Reminders</p>
+              <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="reminders-enabled-toggle">
+                  <input
+                    type="checkbox"
+                    id="reminders-enabled-toggle"
+                    checked
+                  />
+                  <div class="slider round"></div>
+                </label>
+              </div>
             </div>
-            <div class="custom-options">
-              <span class="custom-option selected" data-value="random"
-                >ذكر عشوائي</span
-              >
-              <span class="custom-option" data-value="m">أذكار الصباح</span>
-              <span class="custom-option" data-value="e">أذكار المساء</span>
-              <span class="custom-option" data-value="qd">أدعية قرآنية</span>
-              <span class="custom-option" data-value="pd">أدعية الأنبياء</span>
-              <span class="custom-option" data-value="t">تسابيح و اذكار</span>
-              <span class="custom-option" data-value="ps"
-                >أذكار بعد السلام من الصلاة المفروضة</span
-              >
-              <span class="custom-option" data-value="bs">أذكار قبل النوم</span>
-              <span class="custom-option" data-value="wu">أذكار الاستيقاظ</span>
+            <div id="reminder-controls">
+              <p class="card-title">Select the type of Adkar</p>
+              <div class="custom-select-wrapper">
+                <div class="custom-select">
+                  <div class="custom-select-trigger">
+                    <span>ذكر عشوائي</span>
+                    <div class="arrow"></div>
+                  </div>
+                  <div class="custom-options">
+                    <span class="custom-option selected" data-value="random"
+                      >ذكر عشوائي</span
+                    >
+                    <span class="custom-option" data-value="m"
+                      >أذكار الصباح</span
+                    >
+                    <span class="custom-option" data-value="e"
+                      >أذكار المساء</span
+                    >
+                    <span class="custom-option" data-value="qd"
+                      >أدعية قرآنية</span
+                    >
+                    <span class="custom-option" data-value="pd"
+                      >أدعية الأنبياء</span
+                    >
+                    <span class="custom-option" data-value="t"
+                      >تسابيح و اذكار</span
+                    >
+                    <span class="custom-option" data-value="ps"
+                      >أذكار بعد السلام من الصلاة المفروضة</span
+                    >
+                    <span class="custom-option" data-value="bs"
+                      >أذكار قبل النوم</span
+                    >
+                    <span class="custom-option" data-value="wu"
+                      >أذكار الاستيقاظ</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <p class="card-title">Set reminder interval</p>
+              <div class="input-stepper">
+                <button id="decrement">-</button>
+                <input type="number" id="num" min="1" value="5" />
+                <button id="increment">+</button>
+              </div>
             </div>
           </div>
         </div>
 
-        <p class="card-title">Set reminder interval</p>
-        <div class="input-stepper">
-          <button id="decrement">-</button>
-          <input type="number" id="num" min="1" value="5" />
-          <button id="increment">+</button>
+        <div id="tracker-tab" class="tab-pane">
+          <div class="tracker-card">
+            <p class="card-title">Reminders Today</p>
+            <div class="tracker-count">
+              <span id="reminder-count">0</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <button id="add">Set Reminder</button>
+      <button id="add">Save Settings</button>
       <p id="status-message"></p>
 
       <div class="footer">
+        <div class="theme-switch-wrapper">
+          <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round"></div>
+          </label>
+        </div>
         <a href="https://hoceine.com" target="_blank">
           <img
             width="24"
