@@ -1,134 +1,45 @@
-console.log("in background script");
-
-let defaultDuration = 1.0;
-let dekrType = "random";
 let adkarData = null;
 let dataLoaded = false;
+const ALARM_NAME = "dekr-reminder";
 
-// --- Data Loading ---
 async function loadAdkarData() {
+  if (dataLoaded) return;
   try {
     const response = await fetch(chrome.runtime.getURL("data/adkar.json"));
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     adkarData = await response.json();
     dataLoaded = true;
-    console.log("Adkar data loaded successfully");
   } catch (error) {
     console.error("Failed to load adkar data:", error);
-    dataLoaded = false;
   }
 }
 
-// --- Initialization ---
-// Initial setup on extension install/startup
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({
-    dekrType: "random",
-    minutes: 5,
-    remindersEnabled: true,
-  });
-  loadAdkarData();
-});
-
-chrome.runtime.onStartup.addListener(function () {
-  loadAdkarData();
-});
-
-// --- Alarms ---
-function createAlarm() {
-  chrome.storage.sync.get(
-    ["dekrType", "minutes", "remindersEnabled"],
-    function (data) {
-      if (data.remindersEnabled) {
-        dekrType = data.dekrType || "random";
-        defaultDuration = data.minutes || 1;
-        chrome.alarms.create("dekr-reminder", {
-          periodInMinutes: defaultDuration,
-        });
-        console.log(`Alarm created for ${defaultDuration} minutes`);
-      } else {
-        chrome.alarms.clear("dekr-reminder");
-        console.log("Reminders are disabled. Alarm cleared.");
-      }
-    }
-  );
-}
-
-createAlarm();
-
-chrome.alarms.onAlarm.addListener(function (alarm) {
-  console.log("⏰ Alarm triggered:", alarm.name);
-  if (alarm.name === "dekr-reminder") {
-    chrome.storage.sync.get(["dekrType", "remindersEnabled"], function (data) {
-      console.log("📋 Checking reminder settings:", data);
-      if (data.remindersEnabled) {
-        const dekrType = data.dekrType || "random";
-        console.log(
-          "✅ Reminders enabled, showing notification for:",
-          dekrType
-        );
-        showNotification(dekrType);
-      } else {
-        console.log("🚫 Reminders are disabled, skipping notification");
-      }
+async function updateAlarm(settings) {
+  await chrome.alarms.clear(ALARM_NAME);
+  if (settings.remindersEnabled) {
+    chrome.alarms.create(ALARM_NAME, {
+      periodInMinutes: settings.minutes,
     });
   }
-});
+}
 
-// --- Notifications ---
-async function showNotification(dekrType) {
-  console.log("🔔 showNotification called with dekrType:", dekrType);
-
-  try {
-    if (!dataLoaded) {
-      console.log("⏳ Data not loaded, loading adkar data...");
-      await loadAdkarData();
-    }
-
-    const adkar = await getRandomAdkar(dekrType);
-
-    if (adkar) {
-      console.log("📝 Creating notification with adkar:", adkar.category);
-      chrome.notifications.create(
-        "dekr-notification-" + Date.now(),
-        {
-          type: "basic",
-          iconUrl: "./images/icon.png",
-          title: adkar.category,
-          message: adkar.content,
-          priority: 2,
-        },
-        function (notificationID) {
-          if (chrome.runtime.lastError) {
-            console.error("❌ Notification error:", chrome.runtime.lastError);
-          } else {
-            console.log(
-              "✅ Notification displayed successfully:",
-              notificationID
-            );
-          }
-        }
-      );
-    } else {
-      console.error(
-        "❌ Failed to get adkar for notification of type:",
-        dekrType
-      );
-    }
-  } catch (error) {
-    console.error("❌ Error in showNotification:", error);
+async function showNotification() {
+  if (!dataLoaded) await loadAdkarData();
+  const { dekrType } = await chrome.storage.sync.get("dekrType");
+  const adkar = await getRandomAdkar(dekrType || "random");
+  if (adkar) {
+    chrome.notifications.create(`dekr-notification-${Date.now()}`, {
+      type: "basic",
+      iconUrl: "./images/icon.png",
+      title: adkar.category,
+      message: adkar.content,
+      priority: 2,
+    });
   }
 }
 
-// --- Reminder Logic ---
 async function getRandomAdkar(category) {
-  if (!dataLoaded || !adkarData) {
-    console.error("Adkar data not loaded yet");
-    return null;
-  }
-
+  if (!dataLoaded || !adkarData) return null;
   const categoryMap = {
     m: "أذكار الصباح",
     e: "أذكار المساء",
@@ -139,7 +50,6 @@ async function getRandomAdkar(category) {
     wu: "أذكار الاستيقاظ",
     ps: "أذكار بعد السلام من الصلاة المفروضة",
   };
-
   const selectedCategoryName =
     category === "random"
       ? Object.keys(adkarData)[
@@ -147,50 +57,72 @@ async function getRandomAdkar(category) {
         ]
       : categoryMap[category];
 
-  if (!selectedCategoryName || !adkarData[selectedCategoryName]) {
-    console.error("Category not found:", selectedCategoryName);
-    return null;
-  }
-
+  if (!selectedCategoryName || !adkarData[selectedCategoryName]) return null;
   const adkarArray = adkarData[selectedCategoryName];
-  if (!adkarArray || adkarArray.length === 0) {
-    console.error("No adhkar found in category:", selectedCategoryName);
-    return null;
-  }
+  if (!adkarArray?.length) return null;
 
   const randomIndex = Math.floor(Math.random() * adkarArray.length);
-  const selectedAdkar = adkarArray[randomIndex];
-
-  return {
-    content: selectedAdkar.content,
-    category: selectedCategoryName,
-    count: selectedAdkar.count,
-    description: selectedAdkar.description,
-  };
+  return adkarArray[randomIndex];
 }
 
-// --- Message Handling ---
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.settings) {
-    chrome.storage.sync.set(
-      {
-        dekrType: request.settings.dekrType,
-        minutes: request.settings.minutes,
-        remindersEnabled: request.settings.remindersEnabled,
-      },
-      () => {
-        if (chrome.runtime.lastError) {
-          console.error(
-            "Error saving settings:",
-            chrome.runtime.lastError.message
-          );
-        } else {
-          // Settings saved successfully, now update the alarm
-          console.log("Settings saved, updating alarm.");
-          createAlarm();
-        }
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "saveSettings") {
+    (async () => {
+      try {
+        await chrome.storage.sync.set(request.settings);
+        await updateAlarm(request.settings);
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message });
       }
-    );
-    // No response needed for this one-way communication
+    })();
+    return true; // Keep the message channel open for async response
   }
 });
+
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === ALARM_NAME) {
+    const { remindersEnabled } = await chrome.storage.sync.get(
+      "remindersEnabled"
+    );
+    if (remindersEnabled) {
+      showNotification();
+    }
+  }
+});
+
+async function checkAlarmState() {
+  const settings = await chrome.storage.sync.get([
+    "minutes",
+    "remindersEnabled",
+  ]);
+  const alarm = await chrome.alarms.get(ALARM_NAME);
+
+  if (settings.remindersEnabled && !alarm) {
+    updateAlarm(settings);
+  } else if (!settings.remindersEnabled && alarm) {
+    await chrome.alarms.clear(ALARM_NAME);
+  }
+}
+
+chrome.runtime.onStartup.addListener(() => {
+  loadAdkarData();
+  checkAlarmState();
+});
+
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason === "install") {
+    const defaultSettings = {
+      dekrType: "random",
+      minutes: 5,
+      remindersEnabled: true,
+      theme: "light",
+    };
+    await chrome.storage.sync.set(defaultSettings);
+    await updateAlarm(defaultSettings);
+  }
+  loadAdkarData();
+  checkAlarmState();
+});
+
+loadAdkarData();
