@@ -430,3 +430,211 @@ body.dark-mode .ayah-content #text {
 body.dark-mode #tafseer {
   color: #bdc1c6;
 }
+
+.prayer-times-container {
+  position: fixed;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  width: 320px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.prayer-times-container:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.prayer-times-container h2 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.next-prayer-countdown {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.1)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 15px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.next-prayer-name {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.countdown-time {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 3px;
+  transition: width 1s ease;
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+}
+
+.next-prayer-time {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#prayer-times-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prayer-time {
+  display: flex;
+  justify-content: between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.prayer-time:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+.prayer-time.active {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 172, 254, 0.3),
+    rgba(0, 242, 254, 0.2)
+  );
+  border-color: rgba(79, 172, 254, 0.5);
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+}
+
+.prayer-time.passed {
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.prayer-time .name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  flex: 1;
+}
+
+.prayer-time .time {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: "Courier New", monospace;
+}
+
+#prayer-location {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.loading-prayer {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  font-size: 1rem;
+}
+
+.error-prayer {
+  text-align: center;
+  color: rgba(255, 100, 100, 0.9);
+  padding: 1rem;
+  font-size: 0.9rem;
+  background: rgba(255, 100, 100, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 100, 100, 0.2);
+}
+
+body.dark-mode .prayer-times-container {
+  background: rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .prayer-times-container:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .next-prayer-countdown {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.15));
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .prayer-time {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .prayer-time:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .prayer-time.passed {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .progress-bar {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .prayer-times-container {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: calc(100% - 2rem);
+    margin: 2rem 1rem;
+  }
+
+  .prayer-times-container:hover {
+    transform: none;
+  }
+}
