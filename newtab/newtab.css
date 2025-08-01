@@ -1,323 +1,311 @@
 :root {
-    --button-height: 15px;
-    --button-color: #3fde8f;
-    --transition-duration: 0.8s;
+  --button-height: 15px;
+  --button-color: #3fde8f;
+  --transition-duration: 0.8s;
 }
 
 @font-face {
-    font-family: 'quran';
-    src: url('./fonts/_PDMS_Saleem_QuranFont.ttf') format('truetype');
+  font-family: "quran";
+  src: url("./fonts/_PDMS_Saleem_QuranFont.ttf") format("truetype");
 }
-
 
 html,
 body {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #000000;
-    animation: fadeOut 2s forwards;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #000000;
+  animation: fadeOut 2s forwards;
 }
 
-
-
 @keyframes fadeOut {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }
 
 #bg-color {
-    width: 100%;
-    height: 100%;
-    background-color: #2122228f;
-    z-index: 10;
+  width: 100%;
+  height: 100%;
+  background-color: #2122228f;
+  z-index: 10;
 }
 
 body,
 html {
-    height: 100%;
-    margin: 0;
+  height: 100%;
+  margin: 0;
 }
 
 @keyframes bgZoom {
-    0% {
-        background-size: 100%;
-    }
+  0% {
+    background-size: 100%;
+  }
 
-    100% {
-        background-size: 120%;
-    }
+  100% {
+    background-size: 120%;
+  }
 }
 
 .content {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
-    transition: all 3s ease;
-    z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  transition: all 3s ease;
+  z-index: 1;
 }
 
 .ayah-content #text::before {
-    content: "﴿";
-    margin-left: 10px;
+  content: "﴿";
+  margin-left: 10px;
 }
 
 .ayah-content #text::after {
-    content: "﴾";
-    margin-right: 10px;
+  content: "﴾";
+  margin-right: 10px;
 }
 
 .ayah-content #text {
-    text-align: center;
-    font-size: 36px;
-    color: rgb(236, 240, 239);
-    text-indent: 20px;
-    word-spacing: 5px;
-    direction: rtl;
+  text-align: center;
+  font-size: 36px;
+  color: rgb(236, 240, 239);
+  text-indent: 20px;
+  word-spacing: 5px;
+  direction: rtl;
 }
 
 @media (width > 1024px) {
-    .content {
-        animation: bgZoom 60s linear infinite;
-    }
+  .content {
+    animation: bgZoom 60s linear infinite;
+  }
 }
 
 @media (width < 1024px) {
-    .ayah-content #text {
-        font-size: 26px;
-        text-indent: 17px;
-        word-spacing: 3px;
-    }
+  .ayah-content #text {
+    font-size: 26px;
+    text-indent: 17px;
+    word-spacing: 3px;
+  }
 }
 
 .ayah-content {
-    font-family: 'quran', sans-serif;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    justify-items: center;
-    align-items: center;
-    padding: 20px 35px;
-    backdrop-filter: blur(30px);
-    border-radius: 30px;
-    animation: 400ms ease-out 400ms 1 normal both running ayah-display;
+  font-family: "quran", sans-serif;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  padding: 20px 35px;
+  backdrop-filter: blur(30px);
+  border-radius: 30px;
+  animation: 400ms ease-out 400ms 1 normal both running ayah-display;
 }
 
 .ayah {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: translate(-50%, -50%);
-    font-family: 'quran', sans-serif;
-    z-index: 10;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  font-family: "quran", sans-serif;
+  z-index: 10;
 }
 
-
 .ayah h2 {
-    margin-inline: 5px;
-    text-align: center;
-    margin-block: 15px;
-    font-size: 46px;
-    color: rgb(212, 220, 220);
+  margin-inline: 5px;
+  text-align: center;
+  margin-block: 15px;
+  font-size: 46px;
+  color: rgb(212, 220, 220);
 }
 
 @media (width < 1024px) {
-
-    .ayah h2 {
-        font-size: 30px;
-    }
+  .ayah h2 {
+    font-size: 30px;
+  }
 }
 
 @keyframes ayah-display {
-    0% {
-        opacity: 0;
+  0% {
+    opacity: 0;
+  }
 
-    }
-
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }
 
-
-
 .play-pause {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    width: 30px;
-    height: 30px;
-    opacity: 0.7;
-    padding: 15px;
-    border: 0.2rem solid var(--button-color);
-    border-radius: 50%;
-    filter: drop-shadow(0 0 3.1rem rgba(255, 255, 255, 0.8));
-    transition: all var(--transition-duration) ease;
-    /* Smooth transition for all properties */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  opacity: 0.7;
+  padding: 15px;
+  border: 0.2rem solid var(--button-color);
+  border-radius: 50%;
+  filter: drop-shadow(0 0 3.1rem rgba(255, 255, 255, 0.8));
+  transition: all var(--transition-duration) ease;
+  /* Smooth transition for all properties */
 }
 
 .play-pause:hover {
-    opacity: 1;
-    scale: 1.01;
+  opacity: 1;
+  scale: 1.01;
 }
 
 .player {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
-
-
 
 #previous,
 #next {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 button {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .play {
-    height: 0;
-    width: 0;
-    margin-left: calc(2 * 0.14 * var(--button-height));
-    background: none;
-    border: none;
-    border-top: var(--button-height) solid transparent;
-    border-bottom: var(--button-height) solid transparent;
-    border-left: calc(var(--button-height) * 2 * 0.86) solid var(--button-color);
-    transition: all var(--transition-duration) ease;
-    /* Smooth transition for all properties */
+  height: 0;
+  width: 0;
+  margin-left: calc(2 * 0.14 * var(--button-height));
+  background: none;
+  border: none;
+  border-top: var(--button-height) solid transparent;
+  border-bottom: var(--button-height) solid transparent;
+  border-left: calc(var(--button-height) * 2 * 0.86) solid var(--button-color);
+  transition: all var(--transition-duration) ease;
+  /* Smooth transition for all properties */
 }
 
 .pause {
-    position: relative;
-    background: none;
-    border: none;
-    height: calc(var(--button-height) * 2);
-    width: calc(var(--button-height) * 2 * 0.86);
-    transition: all var(--transition-duration) ease;
-    /* Smooth transition for all properties */
+  position: relative;
+  background: none;
+  border: none;
+  height: calc(var(--button-height) * 2);
+  width: calc(var(--button-height) * 2 * 0.86);
+  transition: all var(--transition-duration) ease;
+  /* Smooth transition for all properties */
 }
 
 .pause::after,
 .pause::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 33%;
-    background: var(--button-color);
-    transition: all var(--transition-duration) ease;
-    /* Smooth transition for background color */
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 33%;
+  background: var(--button-color);
+  transition: all var(--transition-duration) ease;
+  /* Smooth transition for background color */
 }
 
 .pause::before {
-    left: 0;
+  left: 0;
 }
 
 .pause::after {
-    right: 0;
+  right: 0;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 .tafseer-container {
-    margin-top: 20px;
-    text-align: center;
-    max-width: 600px;
-    height: fit-content;
-    max-height: 500px;
-    transition: all var(--transition-duration) ease-in;
+  margin-top: 20px;
+  text-align: center;
+  max-width: 600px;
+  height: fit-content;
+  max-height: 500px;
+  transition: all var(--transition-duration) ease-in;
 }
 
 #tafseer {
-    line-height: 25px;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 20px;
-    color: rgb(179, 231, 219);
+  line-height: 25px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 20px;
+  color: rgb(179, 231, 219);
 }
 
 @media (width < 1024px) {
-    #tafseer {
-        line-height: 25px;
-        font-family: Georgia, 'Times New Roman', Times, serif;
-        font-size: 16px;
-        color: rgb(179, 231, 219);
-    }
+  #tafseer {
+    line-height: 25px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 16px;
+    color: rgb(179, 231, 219);
+  }
 }
 
 .hidden-tafseer {
-    opacity: 0;
-    max-height: 0px;
-    transition: all var(--transition-duration) ease-in;
+  opacity: 0;
+  max-height: 0px;
+  transition: all var(--transition-duration) ease-in;
 }
 
 #toggleTafseer {
-    margin-top: 15px;
-    cursor: pointer;
+  margin-top: 15px;
+  cursor: pointer;
 }
 
-
-
 .toggle-up {
-    transition: transform var(--transition-duration) linear;
-    transform: rotate(180deg);
+  transition: transform var(--transition-duration) linear;
+  transform: rotate(180deg);
 }
 
 .tooltip {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: #e0edea;
-    color: #454545;
-    text-align: center;
-    border-radius: 5px;
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-    opacity: 0;
-    transition: opacity 0.3s;
+  visibility: hidden;
+  width: 120px;
+  background-color: #e0edea;
+  color: #454545;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 /* Tooltip arrow */
 .tooltip .tooltiptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #e0edea transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #e0edea transparent transparent transparent;
 }
 
 /* Show the tooltip on hover */
 .tooltip:hover .tooltiptext {
-    visibility: visible;
-    opacity: 1;
+  visibility: visible;
+  opacity: 1;
 }

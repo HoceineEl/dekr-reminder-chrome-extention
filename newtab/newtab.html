@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ذكرني | New Tab</title>
 
-    <link rel="stylesheet" href="newtab.css">
-</head>
+    <link rel="stylesheet" href="newtab.css" />
+  </head>
 
-<body>
+  <body>
     <div class="content">
-        <div id="bg-color"></div>
-        <div class="ayah">
-            <h2>﴾<span id="surah-name"></span>﴿</h2>
-            <div class="ayah-content">
-                <p id="text">text</p>
-                <div class="player">
-                    <div id="next"><img src="./images/next.png" width="30" alt=""></div>
-                    <div class="play-pause">
-                        <button role="play" class="play"></button>
-                        <button role="pause" class="pause hidden"></button>
-                    </div>
-                    <div id="previous"><img src="./images/previous.png" width="30" alt=""></div>
-                </div>
-
-                <div class="tooltip" id="toggleTafseer">
-                    <img src="./images/show-more.png" width="30" alt="show more /less">
-                    <div class="tooltiptext">Show Tafseer</div>
-                </div>
-
-                <div class="tafseer-container hidden-tafseer">
-                    <p id="tafseer"></p>
-                </div>
+      <div id="bg-color"></div>
+      <div class="ayah">
+        <h2>﴾<span id="surah-name"></span>﴿</h2>
+        <div class="ayah-content">
+          <p id="text">text</p>
+          <div class="player">
+            <div id="next">
+              <img src="./images/next.png" width="30" alt="" />
             </div>
+            <div class="play-pause">
+              <button role="play" class="play"></button>
+              <button role="pause" class="pause hidden"></button>
+            </div>
+            <div id="previous">
+              <img src="./images/previous.png" width="30" alt="" />
+            </div>
+          </div>
 
+          <div class="tooltip" id="toggleTafseer">
+            <img
+              src="./images/show-more.png"
+              width="30"
+              alt="show more /less"
+            />
+            <div class="tooltiptext">Show Tafseer</div>
+          </div>
+
+          <div class="tafseer-container hidden-tafseer">
+            <p id="tafseer"></p>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="newtab.js"></script>
-</body>
-
+  </body>
 </html>

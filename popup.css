@@ -1,202 +1,193 @@
 body {
-    text-align: center;
-    background: linear-gradient(55deg, #7f52e9, #0fe697);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    width: 450px;
+  text-align: center;
+  background: linear-gradient(55deg, #7f52e9, #0fe697);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  width: 450px;
 }
 
 .container {
-    padding: 30px;
-    border-radius: 80px;
-    background-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.621);
-    transition: transform 0.5s ease-in-out;
-    animation: fadeIn 0.5s;
+  padding: 30px;
+  border-radius: 80px;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.621);
+  transition: transform 0.5s ease-in-out;
+  animation: fadeIn 0.5s;
 }
 
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
 
-    100% {
-        opacity: 1;
-    }
+  100% {
+    opacity: 1;
+  }
 }
 
-
 select {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: large;
-    border: 2px solid #0fe697;
-    color: #575857;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: large;
+  border: 2px solid #0fe697;
+  color: #575857;
 }
 
 .input {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #575857;
-    margin-block: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #575857;
+  margin-block: 15px;
 }
 
 .input input {
-    color: #575857;
-    border-bottom: 2px solid gray;
-    border-inline: none;
-    border-top: none;
-    font-size: large;
-    font-weight: bold;
-    width: 30px;
-    background: transparent;
-    padding-left: 10px;
+  color: #575857;
+  border-bottom: 2px solid gray;
+  border-inline: none;
+  border-top: none;
+  font-size: large;
+  font-weight: bold;
+  width: 30px;
+  background: transparent;
+  padding-left: 10px;
 }
 
 .input input:focus {
-    outline: none;
+  outline: none;
 }
 
 select:focus {
-
-    border-color: #0fe697;
-    outline-color: #0fe697;
+  border-color: #0fe697;
+  outline-color: #0fe697;
 }
 
 p {
-    font-weight: 600;
-    font-size: 16px;
-    color: #424946;
+  font-weight: 600;
+  font-size: 16px;
+  color: #424946;
 }
 
 button {
-    margin-bottom: 10px;
-    padding: 8px 20px;
-    border-radius: 10px;
-    color: whitesmoke;
-    font-weight: bold;
-    background: linear-gradient(55deg, #7f52e9, #0fe697);
-    border: none;
-    cursor: pointer;
-    transition: all 1s, transform 0.5s;
-
+  margin-bottom: 10px;
+  padding: 8px 20px;
+  border-radius: 10px;
+  color: whitesmoke;
+  font-weight: bold;
+  background: linear-gradient(55deg, #7f52e9, #0fe697);
+  border: none;
+  cursor: pointer;
+  transition: all 1s, transform 0.5s;
 }
 
-
-
 button:hover {
-
-    transform: scale(1.02);
-
+  transform: scale(1.02);
 }
 
 h1 {
-    color: #0aab70;
-    font-weight: bolder;
-    background: linear-gradient(55deg, #7f52e9, #0fe697);
-    color: transparent;
-    -webkit-background-clip: text;
+  color: #0aab70;
+  font-weight: bolder;
+  background: linear-gradient(55deg, #7f52e9, #0fe697);
+  color: transparent;
+  -webkit-background-clip: text;
 }
 
 .infos {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    align-items: center;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
 }
 
 .infos a {
-    transition: transform 1s;
+  transition: transform 1s;
 }
 
 .infos a:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
-
-
 
 /* Start CheckBox */
 /* Variation of work by @mrhyddenn for Radios */
 
 .check-container {
-    display: flex;
-    gap: 10px;
-    max-width: fit-content;
-    margin-inline: auto;
-    cursor: pointer;
+  display: flex;
+  gap: 10px;
+  max-width: fit-content;
+  margin-inline: auto;
+  cursor: pointer;
 }
 
 .check {
-    cursor: pointer;
-    position: relative;
-    margin: auto;
-    width: 18px;
-    height: 18px;
-    -webkit-tap-highlight-color: transparent;
-    transform: translate3d(0, 0, 0);
+  cursor: pointer;
+  position: relative;
+  margin: auto;
+  width: 18px;
+  height: 18px;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
 }
 
 .check:before {
-    content: "";
-    position: absolute;
-    top: -15px;
-    left: -15px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(34, 50, 84, 0.03);
-    opacity: 0;
-    transition: opacity 0.2s ease;
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(34, 50, 84, 0.03);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 .check svg {
-    position: relative;
-    z-index: 1;
-    fill: none;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke: #7e8083;
-    stroke-width: 1.5;
-    transform: translate3d(0, 0, 0);
-    transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #7e8083;
+  stroke-width: 1.5;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.2s ease;
 }
 
 .check svg path {
-    stroke-dasharray: 60;
-    stroke-dashoffset: 0;
+  stroke-dasharray: 60;
+  stroke-dashoffset: 0;
 }
 
 .check svg polyline {
-    stroke-dasharray: 22;
-    stroke-dashoffset: 66;
+  stroke-dasharray: 22;
+  stroke-dashoffset: 66;
 }
 
 .check:hover:before {
-    opacity: 1;
+  opacity: 1;
 }
 
 .check:hover svg {
-    stroke: var(--accent-color, #65e326);
+  stroke: var(--accent-color, #65e326);
 }
 
-#cbx2:checked+.check svg {
-    stroke: var(--accent-color, #65e326);
+#cbx2:checked + .check svg {
+  stroke: var(--accent-color, #65e326);
 }
 
-#cbx2:checked+.check svg path {
-    stroke-dashoffset: 60;
-    transition: all 0.3s linear;
+#cbx2:checked + .check svg path {
+  stroke-dashoffset: 60;
+  transition: all 0.3s linear;
 }
 
-#cbx2:checked+.check svg polyline {
-    stroke-dashoffset: 42;
-    transition: all 0.2s linear;
-    transition-delay: 0.15s;
+#cbx2:checked + .check svg polyline {
+  stroke-dashoffset: 42;
+  transition: all 0.2s linear;
+  transition-delay: 0.15s;
 }
 
 /* End CheckBox */

@@ -16,12 +16,8 @@
             "128": "images/icon.png"
         }
     },
-    "host_permissions": [
-        "https://ayah.nawafdev.com/api/dekr?types=m"
-    ],
     "background": {
-        "service_worker": "background.js",
-        "type": "module"
+        "service_worker": "background.js"
     },
     "permissions": [
         "alarms",
@@ -30,5 +26,15 @@
     ],
     "chrome_url_overrides": {
         "newtab": "newtab/newtab.html"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "data/adkar.json"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ]
 }
