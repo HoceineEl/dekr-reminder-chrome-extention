@@ -22,24 +22,18 @@ async function loadAdkarData() {
 }
 
 // --- Initialization ---
-chrome.runtime.onStartup.addListener(() => {
+// Initial setup on extension install/startup
+chrome.runtime.onInstalled.addListener(function () {
+  chrome.storage.sync.set({
+    dekrType: "random",
+    minutes: 5,
+    remindersEnabled: true,
+  });
   loadAdkarData();
-  resetDailyCounter();
 });
 
-chrome.runtime.onInstalled.addListener(async ({ reason }) => {
-  await loadAdkarData();
-  resetDailyCounter();
-
-  if (reason === "install") {
-    chrome.storage.sync.set({
-      dekrType,
-      minutes: defaultDuration,
-      remindersEnabled: true, // New master toggle
-      reminderCount: 0,
-      lastReset: new Date().toISOString().split("T")[0],
-    });
-  }
+chrome.runtime.onStartup.addListener(function () {
+  loadAdkarData();
 });
 
 // --- Alarms ---
@@ -65,11 +59,19 @@ function createAlarm() {
 createAlarm();
 
 chrome.alarms.onAlarm.addListener(function (alarm) {
+  console.log("⏰ Alarm triggered:", alarm.name);
   if (alarm.name === "dekr-reminder") {
     chrome.storage.sync.get(["dekrType", "remindersEnabled"], function (data) {
+      console.log("📋 Checking reminder settings:", data);
       if (data.remindersEnabled) {
         const dekrType = data.dekrType || "random";
+        console.log(
+          "✅ Reminders enabled, showing notification for:",
+          dekrType
+        );
         showNotification(dekrType);
+      } else {
+        console.log("🚫 Reminders are disabled, skipping notification");
       }
     });
   }
@@ -77,21 +79,18 @@ chrome.alarms.onAlarm.addListener(function (alarm) {
 
 // --- Notifications ---
 async function showNotification(dekrType) {
+  console.log("🔔 showNotification called with dekrType:", dekrType);
+
   try {
     if (!dataLoaded) {
-      console.log("Adkar data not loaded, attempting to load now...");
+      console.log("⏳ Data not loaded, loading adkar data...");
       await loadAdkarData();
-      if (!dataLoaded) {
-        console.error(
-          "Failed to load adkar data after retry. Cannot show notification."
-        );
-        return;
-      }
     }
 
     const adkar = await getRandomAdkar(dekrType);
 
     if (adkar) {
+      console.log("📝 Creating notification with adkar:", adkar.category);
       chrome.notifications.create(
         "dekr-notification-" + Date.now(),
         {
@@ -103,18 +102,23 @@ async function showNotification(dekrType) {
         },
         function (notificationID) {
           if (chrome.runtime.lastError) {
-            console.error("Notification error:", chrome.runtime.lastError);
+            console.error("❌ Notification error:", chrome.runtime.lastError);
           } else {
-            console.log("Notification displayed:", notificationID);
-            updateReminderCount();
+            console.log(
+              "✅ Notification displayed successfully:",
+              notificationID
+            );
           }
         }
       );
     } else {
-      console.error("Failed to get adkar for notification of type:", dekrType);
+      console.error(
+        "❌ Failed to get adkar for notification of type:",
+        dekrType
+      );
     }
   } catch (error) {
-    console.error("Error in showNotification:", error);
+    console.error("❌ Error in showNotification:", error);
   }
 }
 
@@ -189,53 +193,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     );
     // No response needed for this one-way communication
   }
-
-  // Test function for debugging tracker
-  if (request.testIncrement) {
-    updateReminderCount();
-  }
-
-  if (request.testReset) {
-    resetDailyCounter();
-  }
 });
-
-// --- Progress Tracker ---
-function updateReminderCount() {
-  chrome.storage.sync.get(["reminderCount"], function (data) {
-    let count = data.reminderCount || 0;
-    const newCount = count + 1;
-    chrome.storage.sync.set({ reminderCount: newCount }, () => {
-      if (chrome.runtime.lastError) {
-        console.error(
-          "Error updating reminder count:",
-          chrome.runtime.lastError
-        );
-      } else {
-        console.log(`Reminder count updated: ${count} → ${newCount}`);
-      }
-    });
-  });
-}
-
-function resetDailyCounter() {
-  const today = new Date().toISOString().split("T")[0];
-  chrome.storage.sync.get("lastReset", function (data) {
-    if (data.lastReset !== today) {
-      chrome.storage.sync.set({ reminderCount: 0, lastReset: today }, () => {
-        if (chrome.runtime.lastError) {
-          console.error(
-            "Error resetting daily counter:",
-            chrome.runtime.lastError
-          );
-        } else {
-          console.log(`Daily counter reset for ${today}. Count: 0`);
-        }
-      });
-    } else {
-      console.log(
-        `Daily counter check: Last reset was ${data.lastReset}, no reset needed`
-      );
-    }
-  });
-}

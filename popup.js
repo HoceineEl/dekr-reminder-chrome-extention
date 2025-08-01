@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const numInput = document.getElementById("num");
   const statusMessage = document.getElementById("status-message");
   const themeSwitch = document.getElementById("checkbox");
-  const reminderCountEl = document.getElementById("reminder-count");
   const remindersEnabledToggle = document.getElementById(
     "reminders-enabled-toggle"
   );
@@ -39,9 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (changes.theme) {
       applyTheme(changes.theme.newValue === "dark");
     }
-    if (changes.reminderCount && reminderCountEl) {
-      reminderCountEl.textContent = changes.reminderCount.newValue || 0;
-    }
   });
 
   // --- Reminder Controls Logic ---
@@ -62,14 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- Load saved values ---
   chrome.storage.sync.get(
-    ["dekrType", "minutes", "theme", "reminderCount", "remindersEnabled"],
+    ["dekrType", "minutes", "theme", "remindersEnabled"],
     function (data) {
       applyTheme(data.theme === "dark");
 
       if (adkarTypeSelect) updateSelectValue(data.dekrType || "random");
       if (numInput) numInput.value = data.minutes || 5;
-      if (reminderCountEl)
-        reminderCountEl.textContent = data.reminderCount || 0;
 
       if (remindersEnabledToggle) {
         remindersEnabledToggle.checked = data.remindersEnabled !== false; // Default to true

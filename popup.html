@@ -13,28 +13,11 @@
         <h1>ذكرني</h1>
       </div>
 
-      <div class="tabs">
-        <button class="tab-button active" data-tab="reminder-tab">
-          Reminder
-        </button>
-        <button class="tab-button" data-tab="tracker-tab">Tracker</button>
-      </div>
-
       <div class="tab-content">
         <div id="reminder-tab" class="tab-pane active">
           <div class="card">
             <div class="card-header-with-toggle">
               <p class="card-title">Reminders</p>
-              <div class="theme-switch-wrapper">
-                <label class="theme-switch" for="reminders-enabled-toggle">
-                  <input
-                    type="checkbox"
-                    id="reminders-enabled-toggle"
-                    checked
-                  />
-                  <div class="slider round"></div>
-                </label>
-              </div>
             </div>
             <div id="reminder-controls">
               <p class="card-title">Select the type of Adkar</p>
@@ -82,15 +65,6 @@
                 <input type="number" id="num" min="1" value="5" />
                 <button id="increment">+</button>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div id="tracker-tab" class="tab-pane">
-          <div class="tracker-card">
-            <p class="card-title">Reminders Today</p>
-            <div class="tracker-count">
-              <span id="reminder-count">0</span>
             </div>
           </div>
         </div>

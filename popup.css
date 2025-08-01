@@ -322,24 +322,6 @@ body.dark-mode .footer a:hover {
   opacity: 1;
 }
 
-/* Tracker Card */
-.tracker-card {
-  background: var(--card-background);
-  border-radius: 12px;
-  padding: 15px 20px;
-  width: 100%;
-  box-sizing: border-box;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--border-color);
-}
-
-.tracker-count {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--primary-color);
-  text-align: center;
-}
-
 /* New Reminder Card Header */
 .card-header-with-toggle {
   display: flex;
@@ -397,9 +379,6 @@ body.dark-mode .footer a:hover {
   display: flex;
 }
 
-.tab-pane .card,
-.tab-pane .tracker-card,
-.tab-pane .dnd-card,
-.tab-pane .custom-reminder-card {
+.tab-pane .card {
   width: 100%;
 }
