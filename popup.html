@@ -6,53 +6,72 @@
     <link rel="stylesheet" href="popup.css" />
     <title>Remind Me | ذكرني</title>
   </head>
-
   <body>
     <div class="container">
-      <img src="./images/icon.png" alt="adkari icon" width="80" />
-      <h1>Remind Me | ذكرني</h1>
-      <p>Select the type of Adkar</p>
-      <select id="adkarType">
-        <option value="random" selected>ذكر عشوائي</option>
-        <option value="m">أذكار الصباح</option>
-        <option value="e">أذكار المساء</option>
-        <option value="qd">أدعية قرآنية</option>
-        <option value="pd">أدعية الأنبياء</option>
-        <option value="t">تسابيح و اذكار</option>
-        <option value="ps">أذكار بعد السلام من الصلاة المفروضة</option>
-        <option value="bs">أذكار قبل النوم</option>
-        <option value="wu">أذكار الاستيقاظ</option>
-      </select>
-      <div class="input">
-        Remind me in
-        <input
-          type="number"
-          id="num"
-          min="1"
-          placeholder="Interval in minutes"
-        />
-        minutes
+      <div class="header">
+        <img src="./images/icon.png" alt="adkari icon" width="40" />
+        <h1>ذكرني</h1>
       </div>
-      <button id="add">Remind Me</button>
-      <div class="infos">
-        <a href="https://hoceine.vercel.app" target="_blank"
-          ><img
-            width="35"
+
+      <div class="card">
+        <p class="card-title">Select the type of Adkar</p>
+        <div class="custom-select-wrapper">
+          <div class="custom-select">
+            <div class="custom-select-trigger">
+              <span>ذكر عشوائي</span>
+              <div class="arrow"></div>
+            </div>
+            <div class="custom-options">
+              <span class="custom-option selected" data-value="random"
+                >ذكر عشوائي</span
+              >
+              <span class="custom-option" data-value="m">أذكار الصباح</span>
+              <span class="custom-option" data-value="e">أذكار المساء</span>
+              <span class="custom-option" data-value="qd">أدعية قرآنية</span>
+              <span class="custom-option" data-value="pd">أدعية الأنبياء</span>
+              <span class="custom-option" data-value="t">تسابيح و اذكار</span>
+              <span class="custom-option" data-value="ps"
+                >أذكار بعد السلام من الصلاة المفروضة</span
+              >
+              <span class="custom-option" data-value="bs">أذكار قبل النوم</span>
+              <span class="custom-option" data-value="wu">أذكار الاستيقاظ</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="card-title">Set reminder interval</p>
+        <div class="input-stepper">
+          <button id="decrement">-</button>
+          <input type="number" id="num" min="1" value="5" />
+          <button id="increment">+</button>
+        </div>
+      </div>
+
+      <button id="add">Set Reminder</button>
+      <p id="status-message"></p>
+
+      <div class="footer">
+        <a href="https://hoceine.com" target="_blank">
+          <img
+            width="24"
             src="./images/visit.png"
             alt="Hoceine el idrissi's personal portfolio"
-        /></a>
-        <a href="https://github.com/hoceineel" target="_blank"
-          ><img
-            width="35"
+          />
+        </a>
+        <a href="https://github.com/hoceineel" target="_blank">
+          <img
+            width="24"
             src="./images/github.png"
             alt="Hoceine el idrissi's github profile"
-        /></a>
-        <a href="https://linkedin.com/in/elidrissihoceine" target="_blank"
-          ><img
-            width="35"
+          />
+        </a>
+        <a href="https://linkedin.com/in/elidrissihoceine" target="_blank">
+          <img
+            width="24"
             src="./images/linkedin.png"
             alt="Hoceine el idrissi's linkedin profile"
-        /></a>
+          />
+        </a>
       </div>
     </div>
 
