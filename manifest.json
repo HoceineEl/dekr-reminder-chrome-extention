@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "version": "2.0.0",
+    "version": "2.1.0",
     "name": "Remind Me | ذكرني",
     "description": "Stay connected to Allah in every moment of your day.",
     "icons": {
@@ -26,19 +26,10 @@
         "geolocation"
     ],
     "host_permissions": [
-        "https://api.aladhan.com/"
+        "https://api.alquran.cloud/*",
+        "https://api.aladhan.com/*"
     ],
     "chrome_url_overrides": {
         "newtab": "newtab/newtab.html"
-    },
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "data/adkar.json"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
-    ]
+    }
 }

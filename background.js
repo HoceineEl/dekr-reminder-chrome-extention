@@ -23,19 +23,19 @@ async function updateAlarm(settings) {
   }
 }
 
-async function showNotification() {
+async function showNotification(type) {
   if (!dataLoaded) await loadAdkarData();
-  const { dekrType } = await chrome.storage.sync.get("dekrType");
+  const dekrType = type ?? (await chrome.storage.sync.get("dekrType")).dekrType;
   const adkar = await getRandomAdkar(dekrType || "random");
-  if (adkar) {
-    chrome.notifications.create(`dekr-notification-${Date.now()}`, {
-      type: "basic",
-      iconUrl: "./images/icon.png",
-      title: adkar.category,
-      message: adkar.content,
-      priority: 2,
-    });
-  }
+  if (!adkar) return false;
+  await chrome.notifications.create(`dekr-notification-${Date.now()}`, {
+    type: "basic",
+    iconUrl: "./images/icon.png",
+    title: adkar.category,
+    message: adkar.content,
+    priority: 2,
+  });
+  return true;
 }
 
 async function getRandomAdkar(category) {
@@ -76,7 +76,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ success: false, error: error.message });
       }
     })();
-    return true; // Keep the message channel open for async response
+    return true;
+  }
+  if (request.action === "testNotification") {
+    showNotification(request.dekrType)
+      .then((success) => sendResponse({ success }))
+      .catch((error) => sendResponse({ success: false, error: error.message }));
+    return true;
   }
 });
 
@@ -116,7 +122,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
       dekrType: "random",
       minutes: 5,
       remindersEnabled: true,
-      theme: "light",
     };
     await chrome.storage.sync.set(defaultSettings);
     await updateAlarm(defaultSettings);

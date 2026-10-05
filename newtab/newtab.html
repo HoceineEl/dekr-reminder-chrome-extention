@@ -1,84 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ذكرني | New Tab</title>
-
     <link rel="stylesheet" href="newtab.css" />
   </head>
 
   <body>
-    <header class="header">
-      <div id="clock-date-wrapper">
-        <div id="clock"></div>
-        <div id="date"></div>
-      </div>
-      <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-          <input type="checkbox" id="checkbox" />
-          <div class="slider round"></div>
-        </label>
+    <div class="backdrop" aria-hidden="true"><div id="photo" class="photo"></div></div>
+
+    <header class="top">
+      <div class="when" dir="ltr">
+        <time id="clock" class="clock">--:--</time>
+        <p class="dates">
+          <span id="date"></span>
+          <span class="dot" aria-hidden="true">·</span>
+          <span id="hijri" dir="rtl" lang="ar"></span>
+        </p>
       </div>
     </header>
 
-    <div class="content">
-      <div id="bg-color"></div>
-      <div class="ayah">
-        <h2>﴾<span id="surah-name"></span>﴿</h2>
-        <div class="ayah-content">
-          <p id="text">text</p>
-          <div class="player">
-            <div id="next">
-              <img src="./images/next.png" width="30" alt="" />
-            </div>
-            <div class="play-pause">
-              <button role="play" class="play"></button>
-              <button role="pause" class="pause hidden"></button>
-            </div>
-            <div id="previous">
-              <img src="./images/previous.png" width="30" alt="" />
-            </div>
-          </div>
+    <main class="stage">
+      <article class="ayah" id="ayah" aria-busy="true" aria-live="polite">
+        <h1 class="surah" id="surah-name">&nbsp;</h1>
+        <p class="ayah-text" id="text">&nbsp;</p>
 
-          <div class="tooltip" id="toggleTafseer">
-            <img
-              src="./images/show-more.png"
-              width="30"
-              alt="show more /less"
-            />
-            <div class="tooltiptext">Show Tafseer</div>
-          </div>
-
-          <div class="tafseer-container hidden-tafseer">
-            <p id="tafseer"></p>
-          </div>
+        <div class="controls">
+          <button class="icon-btn" id="previous" type="button" aria-label="الآية السابقة" title="الآية السابقة (←)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+          </button>
+          <button class="play-btn" id="play" type="button" aria-label="تشغيل التلاوة" title="تشغيل / إيقاف (Space)">
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" /></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z" /></svg>
+            <span class="spinner" aria-hidden="true"></span>
+          </button>
+          <button class="icon-btn" id="next" type="button" aria-label="الآية التالية" title="الآية التالية (→)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+          </button>
         </div>
-      </div>
-    </div>
 
-    <footer class="footer">
-      <p id="random-dekr"></p>
+        <button class="text-btn" id="toggle-tafseer" type="button" aria-expanded="false" aria-controls="tafseer-panel">
+          التفسير الميسّر
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+        </button>
+        <div class="tafseer" id="tafseer-panel" hidden>
+          <p id="tafseer"></p>
+        </div>
+      </article>
+    </main>
+
+    <footer class="bottom">
+      <section class="prayers" aria-label="مواقيت الصلاة">
+        <div class="next-prayer" id="next-prayer" hidden>
+          <span class="next-label">الصلاة القادمة</span>
+          <strong id="next-prayer-name"></strong>
+          <span id="countdown" class="countdown" dir="ltr">--:--:--</span>
+        </div>
+        <ol class="prayer-list" id="prayer-list">
+          <li class="prayer-status">جارٍ تحميل مواقيت الصلاة…</li>
+        </ol>
+        <p class="location" id="prayer-location"></p>
+      </section>
+
+      <button class="dekr" id="random-dekr" type="button" title="ذكر آخر"></button>
     </footer>
-
-    <div class="prayer-times-container card">
-      <h2>🕌 Prayer Times</h2>
-
-      <div class="next-prayer-countdown">
-        <div class="next-prayer-name" id="next-prayer-name">Next Prayer</div>
-        <div class="countdown-time" id="countdown-time">--:--:--</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <div class="next-prayer-time" id="next-prayer-time">Loading...</div>
-      </div>
-
-      <div id="prayer-times-list">
-        <div class="loading-prayer">🕌 Loading prayer times...</div>
-      </div>
-
-      <div id="prayer-location"></div>
-    </div>
 
     <script src="newtab.js"></script>
   </body>

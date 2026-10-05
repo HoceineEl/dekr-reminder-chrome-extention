@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,106 +7,69 @@
     <title>Remind Me | ذكرني</title>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <img src="./images/icon.png" alt="adkari icon" width="40" />
+    <header class="header">
+      <img src="./images/icon.png" alt="" width="36" height="36" />
+      <div>
         <h1>ذكرني</h1>
+        <p class="tagline">ذكرٌ يصلك وأنت تتصفّح</p>
       </div>
+    </header>
 
-      <div class="tab-content">
-        <div id="reminder-tab" class="tab-pane active">
-          <div class="card">
-            <div class="card-header-with-toggle">
-              <p class="card-title">Reminders</p>
-              <label class="toggle-switch">
-                <input type="checkbox" id="reminders-enabled-toggle" checked />
-                <span class="toggle-slider"></span>
-              </label>
-            </div>
-            <div id="reminder-controls">
-              <p class="card-title">Select the type of Adkar</p>
-              <div class="custom-select-wrapper">
-                <div class="custom-select">
-                  <div class="custom-select-trigger">
-                    <span>ذكر عشوائي</span>
-                    <div class="arrow"></div>
-                  </div>
-                  <div class="custom-options">
-                    <span class="custom-option selected" data-value="random"
-                      >ذكر عشوائي</span
-                    >
-                    <span class="custom-option" data-value="m"
-                      >أذكار الصباح</span
-                    >
-                    <span class="custom-option" data-value="e"
-                      >أذكار المساء</span
-                    >
-                    <span class="custom-option" data-value="qd"
-                      >أدعية قرآنية</span
-                    >
-                    <span class="custom-option" data-value="pd"
-                      >أدعية الأنبياء</span
-                    >
-                    <span class="custom-option" data-value="t"
-                      >تسابيح و اذكار</span
-                    >
-                    <span class="custom-option" data-value="ps"
-                      >أذكار بعد السلام من الصلاة المفروضة</span
-                    >
-                    <span class="custom-option" data-value="bs"
-                      >أذكار قبل النوم</span
-                    >
-                    <span class="custom-option" data-value="wu"
-                      >أذكار الاستيقاظ</span
-                    >
-                  </div>
-                </div>
-              </div>
+    <main>
+      <label class="row switch-row">
+        <span>
+          <strong>التذكيرات</strong>
+          <small id="reminder-summary"></small>
+        </span>
+        <input type="checkbox" id="reminders-enabled" class="switch" role="switch" />
+      </label>
 
-              <p class="card-title">Set reminder interval</p>
-              <div class="input-stepper">
-                <button id="decrement">-</button>
-                <input type="number" id="num" min="1" value="5" />
-                <button id="increment">+</button>
-              </div>
+      <fieldset id="reminder-controls">
+        <label class="field">
+          <span class="field-label">نوع الذكر</span>
+          <select id="dekr-type">
+            <option value="random">ذكر عشوائي</option>
+            <option value="m">أذكار الصباح</option>
+            <option value="e">أذكار المساء</option>
+            <option value="qd">أدعية قرآنية</option>
+            <option value="pd">أدعية الأنبياء</option>
+            <option value="t">تسابيح وأذكار</option>
+            <option value="ps">أذكار بعد الصلاة</option>
+            <option value="bs">أذكار النوم</option>
+            <option value="wu">أذكار الاستيقاظ</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span class="field-label" id="interval-label">ذكّرني كل</span>
+          <div class="interval" role="group" aria-labelledby="interval-label">
+            <div class="presets" id="presets">
+              <button type="button" data-minutes="5">٥ د</button>
+              <button type="button" data-minutes="15">١٥ د</button>
+              <button type="button" data-minutes="30">٣٠ د</button>
+              <button type="button" data-minutes="60">ساعة</button>
             </div>
+            <label class="custom">
+              <input type="number" id="minutes" min="1" max="1440" inputmode="numeric" aria-label="عدد الدقائق" />
+              <span>دقيقة</span>
+            </label>
           </div>
         </div>
-      </div>
 
-      <button id="add">Save Settings</button>
-      <p id="status-message"></p>
+        <button type="button" id="test" class="secondary">جرّب تذكيرًا الآن</button>
+      </fieldset>
 
-      <div class="footer">
-        <div class="theme-switch-wrapper">
-          <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round"></div>
-          </label>
-        </div>
-        <a href="https://hoceine.com" target="_blank">
-          <img
-            width="24"
-            src="./images/visit.png"
-            alt="Hoceine el idrissi's personal portfolio"
-          />
-        </a>
-        <a href="https://github.com/hoceineel" target="_blank">
-          <img
-            width="24"
-            src="./images/github.png"
-            alt="Hoceine el idrissi's github profile"
-          />
-        </a>
-        <a href="https://linkedin.com/in/elidrissihoceine" target="_blank">
-          <img
-            width="24"
-            src="./images/linkedin.png"
-            alt="Hoceine el idrissi's linkedin profile"
-          />
-        </a>
-      </div>
-    </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </main>
+
+    <footer class="footer">
+      <span>Hoceine El Idrissi</span>
+      <nav aria-label="روابط">
+        <a href="https://hoceine.com" target="_blank" rel="noopener" title="الموقع الشخصي"><img width="18" src="./images/visit.png" alt="الموقع الشخصي" /></a>
+        <a href="https://github.com/hoceineel" target="_blank" rel="noopener" title="GitHub"><img width="18" src="./images/github.png" alt="GitHub" /></a>
+        <a href="https://linkedin.com/in/elidrissihoceine" target="_blank" rel="noopener" title="LinkedIn"><img width="18" src="./images/linkedin.png" alt="LinkedIn" /></a>
+      </nav>
+    </footer>
 
     <script src="popup.js"></script>
   </body>
