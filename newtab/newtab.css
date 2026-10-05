@@ -31,8 +31,8 @@ body {
 
 body {
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-height: 100vh;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100vh;
   overflow-x: hidden;
   background: oklch(0.14 0.01 160);
   color: var(--ink);
@@ -49,6 +49,11 @@ button {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
+}
+
+.play-btn:focus-visible {
+  outline-color: var(--ink);
+  outline-offset: 4px;
 }
 
 [hidden] {
@@ -87,7 +92,32 @@ button {
   transform: scale(1);
 }
 
+.photo-motion .photo {
+  inset: -8%;
+  animation: drift 28s ease-in-out infinite alternate;
+  will-change: translate, scale;
+}
+
+@keyframes drift {
+  from {
+    translate: 0 0;
+    scale: 1;
+  }
+  to {
+    translate: var(--drift-x, 4%) var(--drift-y, 2%);
+    scale: 1.2;
+  }
+}
+
+.photo:not(.ready) {
+  transition: opacity 1.2s var(--ease), transform 0s 1.2s;
+}
+
 .top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
   padding: clamp(20px, 3vw, 40px) clamp(20px, 4vw, 56px) 0;
 }
 
@@ -117,12 +147,19 @@ button {
 
 .stage {
   display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
   padding: 24px clamp(20px, 5vw, 64px);
   min-height: 0;
 }
 
 .ayah {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 100%;
   width: min(100%, 980px);
   text-align: center;
   transition: opacity 0.35s var(--ease);
@@ -142,13 +179,6 @@ button {
   transition: opacity 0.35s var(--ease);
 }
 
-.surah::before {
-  content: "سورة ";
-}
-
-.surah:empty::before {
-  content: none;
-}
 .ayah-text {
   margin: 0;
   font-family: "quran", serif;
@@ -164,10 +194,21 @@ button {
 }
 
 .ayah-number {
-  display: inline-block;
-  margin-inline-start: 0.25em;
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.9em;
+  height: 1.9em;
+  margin-inline-start: 0.35em;
+  padding-inline: 0.3em;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
   color: var(--accent);
-  font-size: 0.8em;
+  font-family: var(--sans);
+  font-size: 0.45em;
+  font-weight: 600;
+  line-height: 1;
+  vertical-align: 0.5em;
+  text-shadow: none;
 }
 
 .controls {
@@ -290,7 +331,12 @@ button {
 
 .tafseer {
   max-width: 70ch;
-  max-height: 28vh;
+  flex: 0 1 auto;
+  min-height: 96px;
+  max-height: 320px;
+  scrollbar-width: thin;
+  scrollbar-color: oklch(1 0 0 / 0.25) transparent;
+  width: 100%;
   margin: 12px auto 0;
   padding: 18px 22px;
   overflow-y: auto;
@@ -461,6 +507,10 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .photo-motion .photo {
+    animation: none;
+  }
+
   .photo,
   .photo.ready {
     transform: none;
@@ -474,4 +524,337 @@ button {
   .spinner {
     animation-duration: 2s;
   }
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.icon-btn.small {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 12px;
+  margin-top: 20px;
+}
+
+.meta-row .text-btn {
+  margin-top: 0;
+}
+
+.reciter-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink-soft);
+  transition: color 0.2s var(--ease);
+}
+
+.reciter-select:hover,
+.reciter-select:focus-within {
+  color: var(--accent);
+}
+
+.reciter-select svg {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.reciter-select svg:first-child {
+  inset-inline-start: 14px;
+}
+
+.reciter-select .chevron {
+  inset-inline-end: 12px;
+}
+
+.reciter-select select {
+  appearance: none;
+  padding: 8px 38px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.reciter-select select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.reciter-select option,
+.reciter-select optgroup {
+  background: oklch(0.2 0.012 160);
+  color: var(--ink);
+}
+
+.credit {
+  position: fixed;
+  bottom: 12px;
+  left: 16px;
+  max-width: 32ch;
+  overflow: hidden;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s var(--ease);
+}
+
+.credit:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.settings {
+  width: min(420px, 100vw);
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0 0 0 auto;
+  margin-inline: 0 auto;
+  padding: 0;
+  border: 0;
+  border-inline-end: 1px solid var(--line);
+  background: oklch(0.17 0.012 160);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+.settings[open] {
+  animation: slide-in 0.35s var(--ease);
+}
+
+.settings::backdrop {
+  background: oklch(0.05 0.01 160 / 0.5);
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-24px);
+    opacity: 0;
+  }
+}
+
+.settings-inner {
+  display: grid;
+  gap: 28px;
+  padding: 24px;
+}
+
+.settings-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  margin: -24px -24px 0;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
+  background: oklch(0.17 0.012 160);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings-head h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.group {
+  display: grid;
+  gap: 10px;
+}
+
+.group h3 {
+  margin: 0 0 2px;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+
+
+
+
+.opt {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: oklch(1 0 0 / 0.04);
+  cursor: pointer;
+}
+
+.opt select {
+  max-width: 55%;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: oklch(0.22 0.012 160);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 42px;
+  height: 24px;
+  margin: 0;
+  border-radius: 999px;
+  background: oklch(1 0 0 / 0.18);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease);
+}
+
+.switch::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: oklch(1 0 0);
+  transition: transform 0.25s var(--ease);
+}
+
+.switch:checked {
+  background: var(--accent);
+}
+
+.switch:checked::after {
+  transform: translateX(-18px);
+}
+
+.shortcuts {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+.shortcuts div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  border-bottom: 1px solid oklch(1 0 0 / 0.06);
+}
+
+.shortcuts dt {
+  order: 2;
+  direction: ltr;
+}
+
+.shortcuts dd {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  margin-inline: 2px;
+  padding: 0 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings[open] {
+    animation: none;
+  }
+}
+
+.opt small {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+}
+
+.toast {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: oklch(0.18 0.01 160);
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -12px);
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.settings-inner:focus {
+  outline: none;
+}
+
+
+
+
+
+
+
+
+
+.ayah.with-tafseer .surah {
+  margin-bottom: 12px;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+}
+
+.ayah.with-tafseer .ayah-text {
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1.8;
+}
+
+.ayah.with-tafseer .ayah-text.long {
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem);
+}
+
+.ayah.with-tafseer .controls {
+  margin-top: 16px;
+}
+
+.ayah.with-tafseer .meta-row {
+  margin-top: 10px;
 }

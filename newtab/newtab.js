@@ -1,7 +1,72 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const IMAGES_COUNT = 18;
   const TOTAL_AYAHS = 6236;
+  const LOCAL_IMAGES = 18;
   const QURAN_API = "https://api.alquran.cloud/v1/ayah";
+  const AUDIO_CDN = "https://everyayah.com/data";
+  const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
+  const PHOTO_CATEGORIES = [
+    "Featured_pictures_of_mountains",
+    "Featured_pictures_of_forests",
+    "Featured_pictures_of_waterfalls",
+    "Featured_pictures_of_lakes",
+  ];
+  const PHOTO_BLOCKLIST = /church|chapel|cathedral|temple|monaster|abbey|statue|shrine|pagoda|buddha|cross|castle|city|town|village|bridge|people|portrait/i;
+  const PHOTO_POOL_TTL = 7 * 24 * 60 * 60 * 1000;
+
+  const RECITERS = [
+    { id: "Alafasy_128kbps", name: "مشاري العفاسي", group: "murattal" },
+    { id: "Yasser_Ad-Dussary_128kbps", name: "ياسر الدوسري", group: "murattal" },
+    { id: "MaherAlMuaiqly128kbps", name: "ماهر المعيقلي", group: "murattal" },
+    { id: "Abdurrahmaan_As-Sudais_192kbps", name: "عبد الرحمن السديس", group: "murattal" },
+    { id: "Saood_ash-Shuraym_128kbps", name: "سعود الشريم", group: "murattal" },
+    { id: "Nasser_Alqatami_128kbps", name: "ناصر القطامي", group: "murattal" },
+    { id: "Ghamadi_40kbps", name: "سعد الغامدي", group: "murattal" },
+    { id: "Fares_Abbad_64kbps", name: "فارس عباد", group: "murattal" },
+    { id: "Abdul_Basit_Murattal_192kbps", name: "عبد الباسط عبد الصمد", group: "murattal" },
+    { id: "Husary_128kbps", name: "محمود خليل الحصري", group: "murattal" },
+    { id: "Minshawy_Murattal_128kbps", name: "محمد صديق المنشاوي", group: "murattal" },
+    { id: "Ali_Jaber_64kbps", name: "علي جابر", group: "murattal" },
+    { id: "Abdullaah_3awwaad_Al-Juhaynee_128kbps", name: "عبد الله الجهني", group: "murattal" },
+    { id: "Salah_Al_Budair_128kbps", name: "صلاح البدير", group: "murattal" },
+    { id: "Abdullah_Matroud_128kbps", name: "عبد الله المطرود", group: "murattal" },
+    { id: "Khaalid_Abdullaah_al-Qahtaanee_192kbps", name: "خالد القحطاني", group: "murattal" },
+    { id: "Muhsin_Al_Qasim_192kbps", name: "محسن القاسم", group: "murattal" },
+    { id: "Abu_Bakr_Ash-Shaatree_128kbps", name: "أبو بكر الشاطري", group: "murattal" },
+    { id: "ahmed_ibn_ali_al_ajamy_128kbps", name: "أحمد العجمي", group: "murattal" },
+    { id: "Hudhaify_128kbps", name: "علي الحذيفي", group: "murattal" },
+    { id: "Muhammad_Ayyoub_128kbps", name: "محمد أيوب", group: "murattal" },
+    { id: "Muhammad_Jibreel_128kbps", name: "محمد جبريل", group: "murattal" },
+    { id: "Abdullah_Basfar_192kbps", name: "عبد الله بصفر", group: "murattal" },
+    { id: "Hani_Rifai_192kbps", name: "هاني الرفاعي", group: "murattal" },
+    { id: "Salaah_AbdulRahman_Bukhatir_128kbps", name: "صلاح بو خاطر", group: "murattal" },
+    { id: "Akram_AlAlaqimy_128kbps", name: "أكرم العلاقمي", group: "murattal" },
+    { id: "Yaser_Salamah_128kbps", name: "ياسر سلامة", group: "murattal" },
+    { id: "Sahl_Yassin_128kbps", name: "سهل ياسين", group: "murattal" },
+    { id: "Ali_Hajjaj_AlSuesy_128kbps", name: "علي حجاج السويسي", group: "murattal" },
+    { id: "Ahmed_Neana_128kbps", name: "أحمد نعينع", group: "murattal" },
+    { id: "Muhammad_AbdulKareem_128kbps", name: "محمد عبد الكريم", group: "murattal" },
+    { id: "khalefa_al_tunaiji_64kbps", name: "خليفة الطنيجي", group: "murattal" },
+    { id: "Ayman_Sowaid_64kbps", name: "أيمن سويد", group: "murattal" },
+    { id: "aziz_alili_128kbps", name: "عزيز عليلي", group: "murattal" },
+    { id: "Abdul_Basit_Mujawwad_128kbps", name: "عبد الباسط عبد الصمد", group: "mujawwad" },
+    { id: "Husary_128kbps_Mujawwad", name: "محمود خليل الحصري", group: "mujawwad" },
+    { id: "Minshawy_Mujawwad_192kbps", name: "محمد صديق المنشاوي", group: "mujawwad" },
+    { id: "Mohammad_al_Tablaway_128kbps", name: "محمد محمود الطبلاوي", group: "mujawwad" },
+    { id: "Mustafa_Ismail_48kbps", name: "مصطفى إسماعيل", group: "mujawwad" },
+    { id: "mahmoud_ali_al_banna_32kbps", name: "محمود علي البنا", group: "mujawwad" },
+    { id: "Husary_Muallim_128kbps", name: "الحصري (المصحف المعلّم)", group: "muallim" },
+    { id: "warsh/warsh_ibrahim_aldosary_128kbps", name: "إبراهيم الدوسري", group: "warsh" },
+    { id: "warsh/warsh_yassin_al_jazaery_64kbps", name: "ياسين الجزائري", group: "warsh" },
+    { id: "warsh/warsh_Abdul_Basit_128kbps", name: "عبد الباسط عبد الصمد", group: "warsh" },
+  ];
+
+  const RECITER_GROUPS = {
+    murattal: "مرتّل",
+    mujawwad: "مجوّد",
+    muallim: "تعليمي",
+    warsh: "رواية ورش عن نافع",
+  };
+
   const PRAYERS = [
     ["Fajr", "الفجر"],
     ["Dhuhr", "الظهر"],
@@ -9,6 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
     ["Maghrib", "المغرب"],
     ["Isha", "العشاء"],
   ];
+
+  const DEFAULT_SETTINGS = {
+    reciter: "Minshawy_Murattal_128kbps",
+    photoInterval: 5,
+    photoMotion: true,
+    showTafseer: false,
+    showPrayers: true,
+    showDekr: true,
+    clock12: false,
+    method: "auto",
+    continueReading: false,
+  };
 
   const $ = (id) => document.getElementById(id);
   const els = {
@@ -21,24 +98,42 @@ document.addEventListener("DOMContentLoaded", () => {
     play: $("play"),
     next: $("next"),
     previous: $("previous"),
+    reciterSelect: $("reciter-select"),
     clock: $("clock"),
     date: $("date"),
     hijri: $("hijri"),
     dekr: $("random-dekr"),
+    prayers: $("prayers"),
     nextPrayer: $("next-prayer"),
     nextPrayerName: $("next-prayer-name"),
     countdown: $("countdown"),
     prayerList: $("prayer-list"),
     location: $("prayer-location"),
+    photos: [$("photo-a"), $("photo-b")],
+    credit: $("photo-credit"),
+    nextPhoto: $("next-photo"),
+    settings: $("settings"),
+    openSettings: $("open-settings"),
+    copy: $("copy-ayah"),
+    toast: $("toast"),
   };
 
-  const audio = new Audio();
-  audio.preload = "none";
+  let settings = { ...DEFAULT_SETTINGS };
   let currentAyah = null;
   let requestId = 0;
   let autoAdvance = false;
+  const ayahCache = new Map();
+  const audio = new Audio();
+  const preloader = new Audio();
+  preloader.preload = "auto";
+  preloader.muted = true;
 
   const toArabicDigits = (n) => Number(n).toLocaleString("ar-EG", { useGrouping: false });
+  const wrapAyah = (n) => ((n - 1 + TOTAL_AYAHS) % TOTAL_AYAHS) + 1;
+  const reciter = () =>
+    RECITERS.find((r) => r.id === settings.reciter) ?? RECITERS.find((r) => r.id === DEFAULT_SETTINGS.reciter);
+  const pad3 = (n) => String(n).padStart(3, "0");
+  const audioUrl = (ayah, r = reciter()) => `${AUDIO_CDN}/${r.id}/${pad3(ayah.surahNumber)}${pad3(ayah.numberInSurah)}.mp3`;
 
   async function fetchJson(url) {
     const response = await fetch(url);
@@ -46,25 +141,45 @@ document.addEventListener("DOMContentLoaded", () => {
     return response.json();
   }
 
+  function fetchAyah(number) {
+    if (!ayahCache.has(number)) {
+      const request = fetchJson(`${QURAN_API}/${number}/editions/quran-uthmani,ar.muyassar`).then(({ data }) => {
+        const [text, tafseer] = data;
+        return {
+          number,
+          surah: text.surah.name.replace(/^سُورَةُ\s*/, ""),
+          surahNumber: text.surah.number,
+          numberInSurah: text.numberInSurah,
+          text: text.text,
+          tafseer: tafseer.text,
+        };
+      });
+      request.catch(() => ayahCache.delete(number));
+      ayahCache.set(number, request);
+    }
+    return ayahCache.get(number);
+  }
+
+  function prefetchAround(number) {
+    fetchAyah(wrapAyah(number + 1))
+      .then((next) => (preloader.src = audioUrl(next)))
+      .catch(() => {});
+    fetchAyah(wrapAyah(number - 1)).catch(() => {});
+  }
+
   async function loadAyah(number, { play = false } = {}) {
     const id = ++requestId;
-    const target = ((number - 1 + TOTAL_AYAHS) % TOTAL_AYAHS) + 1;
+    const target = wrapAyah(number);
     els.ayah.setAttribute("aria-busy", "true");
 
     try {
-      const { data } = await fetchJson(`${QURAN_API}/${target}/editions/ar.alafasy,ar.muyassar`);
+      const ayah = await fetchAyah(target);
       if (id !== requestId) return;
-      const [recitation, tafseer] = data;
-      renderAyah({
-        number: target,
-        surah: recitation.surah.name.replace(/^سُورَةُ\s*/, ""),
-        numberInSurah: recitation.numberInSurah,
-        text: recitation.text,
-        audio: recitation.audio,
-        tafseer: tafseer.text,
-      });
+      renderAyah(ayah);
+      chrome.storage.local.set({ lastAyah: target });
       if (play) playAudio();
       else stopAudio();
+      prefetchAround(target);
     } catch (error) {
       console.error("Failed to load ayah:", error);
       if (id === requestId && currentAyah === null) renderAyah(AYAT_AL_KURSI);
@@ -75,15 +190,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderAyah(ayah) {
     currentAyah = ayah;
-    els.surah.textContent = ayah.surah;
-    els.text.textContent = ayah.text.replace(/^بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ\s+/, "");
+    els.surah.textContent = `سورة ${ayah.surah}`;
+    els.text.textContent = ayah.text;
     const marker = document.createElement("span");
     marker.className = "ayah-number";
-    marker.textContent = `﴿${toArabicDigits(ayah.numberInSurah)}﴾`;
+    marker.textContent = toArabicDigits(ayah.numberInSurah);
+    marker.setAttribute("aria-label", `الآية ${toArabicDigits(ayah.numberInSurah)}`);
     els.text.append(" ", marker);
     els.text.classList.toggle("long", ayah.text.length > 420);
     els.tafseer.textContent = ayah.tafseer;
-    audio.src = ayah.audio;
+    audio.src = audioUrl(ayah);
   }
 
   function playAudio() {
@@ -98,13 +214,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function togglePlay() {
-    if (audio.paused) {
-      autoAdvance = true;
-      playAudio();
-    } else {
-      autoAdvance = false;
-      stopAudio();
-    }
+    autoAdvance = audio.paused;
+    if (audio.paused) playAudio();
+    else stopAudio();
   }
 
   function setPlayState(state) {
@@ -118,23 +230,57 @@ document.addEventListener("DOMContentLoaded", () => {
     loadAyah(currentAyah.number + direction, { play: !audio.paused });
   }
 
+  function switchReciter(id) {
+    const wasPlaying = !audio.paused;
+    saveSettings({ reciter: id });
+    if (!currentAyah) return;
+    audio.src = audioUrl(currentAyah);
+    prefetchAround(currentAyah.number);
+    if (wasPlaying) playAudio();
+  }
+
   audio.addEventListener("playing", () => setPlayState("playing"));
   audio.addEventListener("waiting", () => setPlayState("loading"));
   audio.addEventListener("pause", () => setPlayState("paused"));
   audio.addEventListener("error", () => setPlayState("paused"));
   audio.addEventListener("ended", () => {
+    if (photoDue) changePhoto();
     if (autoAdvance) loadAyah(currentAyah.number + 1, { play: true });
   });
 
-  function toggleTafseer() {
-    const open = els.tafseerPanel.hidden;
+  let toastTimer;
+
+  function showToast(message) {
+    clearTimeout(toastTimer);
+    els.toast.textContent = message;
+    els.toast.classList.add("visible");
+    toastTimer = setTimeout(() => els.toast.classList.remove("visible"), 1800);
+  }
+
+  async function copyAyah() {
+    if (!currentAyah) return;
+    try {
+      await navigator.clipboard.writeText(
+        `${currentAyah.text} ﴿${toArabicDigits(currentAyah.numberInSurah)}﴾\n[سورة ${currentAyah.surah}]`
+      );
+      showToast("نُسخت الآية");
+    } catch {
+      showToast("تعذّر النسخ");
+    }
+  }
+
+  function setTafseer(open) {
     els.tafseerPanel.hidden = !open;
     els.tafseerToggle.setAttribute("aria-expanded", String(open));
+    els.ayah.classList.toggle("with-tafseer", open);
   }
 
   function displayTime() {
     const now = new Date();
-    els.clock.textContent = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    els.clock.textContent = now.toLocaleTimeString(settings.clock12 ? "en-US" : "en-GB", {
+      hour: settings.clock12 ? "numeric" : "2-digit",
+      minute: "2-digit",
+    });
     els.clock.dateTime = now.toISOString();
     els.date.textContent = now.toLocaleDateString("en-US", {
       weekday: "long",
@@ -167,15 +313,110 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function initBackgroundImage() {
-    const photo = $("photo");
-    const src = `images/${Math.floor(Math.random() * IMAGES_COUNT) + 1}.jpeg`;
-    const image = new Image();
-    image.onload = () => {
-      photo.style.backgroundImage = `url(${src})`;
-      requestAnimationFrame(() => photo.classList.add("ready"));
-    };
-    image.src = src;
+  let activePhoto = 0;
+
+  function showPhoto(photo) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => {
+        const next = els.photos[1 - activePhoto];
+        next.style.backgroundImage = `url("${photo.src}")`;
+        next.style.setProperty("--drift-x", `${((Math.random() < 0.5 ? -1 : 1) * (3 + Math.random() * 3)).toFixed(2)}%`);
+        next.style.setProperty("--drift-y", `${((Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2)).toFixed(2)}%`);
+        next.style.animationDelay = `-${(4 + Math.random() * 10).toFixed(1)}s`;
+        next.style.animationName = "none";
+        void next.offsetWidth;
+        next.style.animationName = "";
+        requestAnimationFrame(() => {
+          next.classList.add("ready");
+          els.photos[activePhoto].classList.remove("ready");
+          activePhoto = 1 - activePhoto;
+        });
+        els.credit.hidden = !photo.page;
+        if (photo.page) {
+          els.credit.href = photo.page;
+          els.credit.textContent = "الصورة من ويكيميديا كومنز";
+          els.credit.title = photo.title;
+        }
+        resolve();
+      };
+      image.onerror = reject;
+      image.src = photo.src;
+    });
+  }
+
+  const localPhoto = () => ({ src: `images/${Math.floor(Math.random() * LOCAL_IMAGES) + 1}.jpeg` });
+
+  async function getPhotoPool() {
+    const { photoPool } = await chrome.storage.local.get("photoPool");
+    if (photoPool && Date.now() - photoPool.fetchedAt < PHOTO_POOL_TTL) return photoPool.photos;
+
+    const lists = await Promise.all(
+      PHOTO_CATEGORIES.map((category) =>
+        fetchJson(
+          `${COMMONS_API}?action=query&generator=categorymembers&gcmtitle=Category:${category}&gcmtype=file&gcmlimit=500&prop=imageinfo&iiprop=url|size&iiurlwidth=2560&format=json&origin=*`
+        )
+          .then((json) => Object.values(json.query?.pages ?? {}))
+          .catch(() => [])
+      )
+    );
+    const photos = lists
+      .flat()
+      .filter((page) => {
+        const info = page.imageinfo?.[0];
+        if (!info?.thumburl || PHOTO_BLOCKLIST.test(page.title)) return false;
+        const ratio = info.width / info.height;
+        return info.width >= 2400 && ratio >= 1.3 && ratio <= 2.1;
+      })
+      .map((page) => ({
+        src: page.imageinfo[0].thumburl,
+        page: page.imageinfo[0].descriptionurl,
+        title: page.title.replace(/^File:/, "").replace(/\.\w+$/, ""),
+      }));
+
+    if (photos.length) await chrome.storage.local.set({ photoPool: { fetchedAt: Date.now(), photos } });
+    return photos;
+  }
+
+  async function queueNextPhoto() {
+    try {
+      const pool = await getPhotoPool();
+      if (!pool.length) return;
+      const photo = pool[Math.floor(Math.random() * pool.length)];
+      await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = resolve;
+        image.onerror = reject;
+        image.src = photo.src;
+      });
+      await chrome.storage.local.set({ nextPhoto: photo });
+    } catch (error) {
+      console.error("Failed to queue photo:", error);
+    }
+  }
+
+  let photoTimer;
+  let photoDue = false;
+
+  function schedulePhotoRotation() {
+    clearInterval(photoTimer);
+    photoDue = false;
+    if (!settings.photoInterval) return;
+    photoTimer = setInterval(() => {
+      if (document.hidden || els.settings.open) return;
+      if (audio.paused) changePhoto();
+      else photoDue = true;
+    }, settings.photoInterval * 60 * 1000);
+  }
+
+  async function changePhoto() {
+    photoDue = false;
+    els.nextPhoto.disabled = true;
+    const { nextPhoto } = await chrome.storage.local.get("nextPhoto");
+    await chrome.storage.local.remove("nextPhoto");
+    await showPhoto(nextPhoto ?? localPhoto()).catch(() => showPhoto(localPhoto()));
+    els.nextPhoto.disabled = false;
+    queueNextPhoto();
   }
 
   const todayKey = () => new Date().toLocaleDateString("en-CA");
@@ -189,7 +430,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function formatTime(value) {
-    return parseTime(value).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    return parseTime(value).toLocaleTimeString(settings.clock12 ? "en-US" : "en-GB", {
+      hour: settings.clock12 ? "numeric" : "2-digit",
+      minute: "2-digit",
+    });
   }
 
   function getPosition() {
@@ -198,31 +442,34 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  let prayerTimer;
+  let prayerData = null;
+
   async function loadPrayerTimes() {
     const { prayerTimes } = await chrome.storage.local.get("prayerTimes");
-    if (prayerTimes?.date === todayKey()) return startPrayerTimes(prayerTimes);
+    if (prayerTimes?.date === todayKey() && prayerTimes.method === settings.method) return startPrayerTimes(prayerTimes);
 
     try {
       const { coords } = await getPosition();
+      const method = settings.method === "auto" ? "" : `&method=${settings.method}`;
       const { data } = await fetchJson(
-        `https://api.aladhan.com/v1/timings?latitude=${coords.latitude}&longitude=${coords.longitude}`
+        `https://api.aladhan.com/v1/timings?latitude=${coords.latitude}&longitude=${coords.longitude}${method}`
       );
-      const cached = { date: todayKey(), timings: data.timings, location: data.meta.timezone };
+      const cached = { date: todayKey(), method: settings.method, timings: data.timings, location: data.meta.timezone };
       await chrome.storage.local.set({ prayerTimes: cached });
       startPrayerTimes(cached);
     } catch (error) {
       console.error("Failed to load prayer times:", error);
       if (prayerTimes) return startPrayerTimes(prayerTimes);
-      const denied = error?.code === 1;
       showPrayerStatus(
-        denied ? "اسمح بالوصول إلى موقعك لعرض مواقيت الصلاة." : "تعذّر تحميل مواقيت الصلاة.",
+        error?.code === 1 ? "اسمح بالوصول إلى موقعك لعرض مواقيت الصلاة." : "تعذّر تحميل مواقيت الصلاة.",
         true
       );
     }
   }
 
   function showPrayerStatus(message, retry = false) {
-    els.prayerList.replaceChildren();
+    els.nextPrayer.hidden = true;
     const item = document.createElement("li");
     item.className = "prayer-status";
     item.textContent = message;
@@ -236,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       item.append(button);
     }
-    els.prayerList.append(item);
+    els.prayerList.replaceChildren(item);
   }
 
   function getSchedule(timings) {
@@ -247,19 +494,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return { times, next, nextIndex };
   }
 
-  function startPrayerTimes({ timings, location }) {
-    els.location.textContent = location.replace(/_/g, " ").split("/").pop();
+  function startPrayerTimes(data) {
+    prayerData = data;
+    const day = todayKey();
     let renderedIndex = null;
+    els.location.textContent = data.location.replace(/_/g, " ").split("/").pop();
 
     const tick = () => {
-      if (renderedIndex !== null && todayKey() !== startPrayerTimes.day) {
-        clearInterval(timer);
+      if (todayKey() !== day) {
+        clearInterval(prayerTimer);
         return loadPrayerTimes();
       }
-      const { times, next, nextIndex } = getSchedule(timings);
+      const { times, next, nextIndex } = getSchedule(data.timings);
       if (nextIndex !== renderedIndex) {
         renderedIndex = nextIndex;
-        renderPrayerList(times, nextIndex, timings);
+        renderPrayerList(times, nextIndex, data.timings);
       }
       const diff = Math.max(0, next.at - new Date());
       const pad = (n) => String(n).padStart(2, "0");
@@ -270,10 +519,8 @@ document.addEventListener("DOMContentLoaded", () => {
       els.nextPrayer.hidden = false;
     };
 
-    startPrayerTimes.day = todayKey();
-    clearInterval(startPrayerTimes.timer);
-    const timer = setInterval(tick, 1000);
-    startPrayerTimes.timer = timer;
+    clearInterval(prayerTimer);
+    prayerTimer = setInterval(tick, 1000);
     tick();
   }
 
@@ -301,39 +548,117 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  function renderReciterSelect() {
+    els.reciterSelect.replaceChildren(
+      ...Object.entries(RECITER_GROUPS).map(([key, label]) => {
+        const group = document.createElement("optgroup");
+        group.label = label;
+        group.append(...RECITERS.filter((r) => r.group === key).map((r) => new Option(r.name, r.id)));
+        return group;
+      })
+    );
+  }
+
+  function applySettings(previous = {}) {
+    els.reciterSelect.value = reciter().id;
+    els.settings.querySelectorAll("[data-setting]").forEach((input) => {
+      const value = settings[input.dataset.setting];
+      if (input.type === "checkbox") input.checked = value;
+      else input.value = value;
+    });
+    if (previous.photoInterval !== settings.photoInterval) schedulePhotoRotation();
+    document.body.classList.toggle("photo-motion", settings.photoMotion);
+    els.prayers.hidden = !settings.showPrayers;
+    els.dekr.hidden = !settings.showDekr;
+    displayTime();
+
+    if (previous.showTafseer !== settings.showTafseer) setTafseer(settings.showTafseer);
+    if (previous.method && previous.method !== settings.method) {
+      showPrayerStatus("جارٍ تحميل مواقيت الصلاة…");
+      loadPrayerTimes();
+    } else if (previous.clock12 !== undefined && previous.clock12 !== settings.clock12 && prayerData) {
+      startPrayerTimes(prayerData);
+    }
+  }
+
+  function saveSettings(patch) {
+    const previous = settings;
+    settings = { ...settings, ...patch };
+    chrome.storage.sync.set({ newtab: settings });
+    applySettings(previous);
+  }
+
   els.play.addEventListener("click", togglePlay);
   els.next.addEventListener("click", () => step(1));
   els.previous.addEventListener("click", () => step(-1));
-  els.tafseerToggle.addEventListener("click", toggleTafseer);
+  els.tafseerToggle.addEventListener("click", () => setTafseer(els.tafseerPanel.hidden));
+  els.nextPhoto.addEventListener("click", () => {
+    changePhoto();
+    schedulePhotoRotation();
+  });
+  els.copy.addEventListener("click", copyAyah);
+  els.openSettings.addEventListener("click", () => els.settings.showModal());
+  els.reciterSelect.addEventListener("change", () => {
+    switchReciter(els.reciterSelect.value);
+    els.reciterSelect.blur();
+  });
+  els.settings.addEventListener("change", (event) => {
+    const input = event.target.closest("[data-setting]");
+    if (!input) return;
+    const value = input.type === "checkbox" ? input.checked : input.dataset.type === "number" ? Number(input.value) : input.value;
+    saveSettings({ [input.dataset.setting]: value });
+  });
+  els.settings.addEventListener("click", (event) => {
+    if (event.target === els.settings) els.settings.close();
+  });
 
   document.addEventListener("keydown", (event) => {
-    if (event.target.closest("input, textarea, [contenteditable]") || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (els.settings.open || event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.target.closest("input, textarea, [contenteditable]")) return;
+    if (event.target.closest("select") && event.code !== "Space" && !/^[a-z]$/i.test(event.key)) return;
+    const key = event.key.toLowerCase();
     if (event.code === "Space") {
       event.preventDefault();
       togglePlay();
-    } else if (event.key === "ArrowRight") {
-      step(1);
     } else if (event.key === "ArrowLeft") {
+      step(1);
+    } else if (event.key === "ArrowRight") {
       step(-1);
-    } else if (event.key.toLowerCase() === "t") {
-      toggleTafseer();
+    } else if (key === "t" || key === "ف") {
+      setTafseer(els.tafseerPanel.hidden);
+    } else if (key === "c" || key === "ؤ") {
+      copyAyah();
+    } else if (key === "b" || key === "لا") {
+      changePhoto();
+    } else if (key === "s" || key === "س") {
+      els.settings.showModal();
     }
   });
 
   const AYAT_AL_KURSI = {
     number: 262,
     surah: "البقرة",
+    surahNumber: 2,
     numberInSurah: 255,
-    audio: "https://cdn.islamic.network/quran/audio/128/ar.alafasy/262.mp3",
     text: "ٱللَّهُ لَآ إِلَـٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ ۚ لَا تَأْخُذُهُۥ سِنَةٌۭ وَلَا نَوْمٌۭ ۚ لَّهُۥ مَا فِى ٱلسَّمَـٰوَٰتِ وَمَا فِى ٱلْأَرْضِ ۗ مَن ذَا ٱلَّذِى يَشْفَعُ عِندَهُۥٓ إِلَّا بِإِذْنِهِۦ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَىْءٍۢ مِّنْ عِلْمِهِۦٓ إِلَّا بِمَا شَآءَ ۚ وَسِعَ كُرْسِيُّهُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ ۖ وَلَا يَـُٔودُهُۥ حِفْظُهُمَا ۚ وَهُوَ ٱلْعَلِىُّ ٱلْعَظِيمُ",
     tafseer:
       "الله الذي لا يستحق الألوهية والعبودية إلا هو، الحيُّ الذي له جميع معاني الحياة الكاملة كما يليق بجلاله، القائم على كل شيء، لا تأخذه سِنَة أي: نعاس، ولا نوم، كل ما في السماوات وما في الأرض ملك له، ولا يتجاسر أحد أن يشفع عنده إلا بإذنه، محيط علمه بجميع الكائنات ماضيها وحاضرها ومستقبلها، يعلم ما بين أَيْدِي الخلائق من الأمور المستقبلة، وما خلفهم من الأمور الماضية، ولا يَطَّلعُ أحد من الخلق على شيء من علمه إلا بما أعلمه الله وأطلعه عليه. وسع كرسيه السماوات والأرض، ولا يثقله سبحانه حفظهما، وهو العلي بذاته وصفاته على جميع مخلوقاته، الجامع لجميع صفات العظمة والكبرياء. وهذه الآية أعظم آية في القرآن، وتسمى: (آية الكرسي).",
   };
 
-  initBackgroundImage();
-  displayTime();
-  setInterval(displayTime, 1000);
-  loadAyah(Math.floor(Math.random() * TOTAL_AYAHS) + 1);
-  displayRandomDekr();
-  loadPrayerTimes();
+  async function init() {
+    const stored = await chrome.storage.sync.get("newtab");
+    settings = { ...DEFAULT_SETTINGS, ...stored.newtab };
+    renderReciterSelect();
+    applySettings({});
+
+    changePhoto();
+    schedulePhotoRotation();
+    setInterval(displayTime, 1000);
+    const { lastAyah } = await chrome.storage.local.get("lastAyah");
+    loadAyah(settings.continueReading && lastAyah ? lastAyah : Math.floor(Math.random() * TOTAL_AYAHS) + 1);
+    displayRandomDekr();
+    loadPrayerTimes();
+  }
+
+  init();
 });

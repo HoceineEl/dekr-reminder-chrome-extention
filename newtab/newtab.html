@@ -8,7 +8,10 @@
   </head>
 
   <body>
-    <div class="backdrop" aria-hidden="true"><div id="photo" class="photo"></div></div>
+    <div class="backdrop" aria-hidden="true">
+      <div class="photo" id="photo-a"></div>
+      <div class="photo" id="photo-b"></div>
+    </div>
 
     <header class="top">
       <div class="when" dir="ltr">
@@ -19,15 +22,24 @@
           <span id="hijri" dir="rtl" lang="ar"></span>
         </p>
       </div>
+
+      <div class="toolbar">
+        <button class="icon-btn" id="next-photo" type="button" aria-label="صورة أخرى" title="صورة أخرى (B)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 16l5-5 4 4 3-3 6 6" /><circle cx="16" cy="9" r="1.5" /></svg>
+        </button>
+        <button class="icon-btn" id="open-settings" type="button" aria-label="الإعدادات" title="الإعدادات (S)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" /><circle cx="16" cy="7" r="2" /><circle cx="10" cy="17" r="2" /></svg>
+        </button>
+      </div>
     </header>
 
     <main class="stage">
       <article class="ayah" id="ayah" aria-busy="true" aria-live="polite">
-        <h1 class="surah" id="surah-name">&nbsp;</h1>
+        <h1 class="surah" id="surah-name"></h1>
         <p class="ayah-text" id="text">&nbsp;</p>
 
         <div class="controls">
-          <button class="icon-btn" id="previous" type="button" aria-label="الآية السابقة" title="الآية السابقة (←)">
+          <button class="icon-btn" id="previous" type="button" aria-label="الآية السابقة" title="الآية السابقة (→)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
           </button>
           <button class="play-btn" id="play" type="button" aria-label="تشغيل التلاوة" title="تشغيل / إيقاف (Space)">
@@ -35,15 +47,26 @@
             <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h3v14H8zM13 5h3v14h-3z" /></svg>
             <span class="spinner" aria-hidden="true"></span>
           </button>
-          <button class="icon-btn" id="next" type="button" aria-label="الآية التالية" title="الآية التالية (→)">
+          <button class="icon-btn" id="next" type="button" aria-label="الآية التالية" title="الآية التالية (←)">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
           </button>
         </div>
 
-        <button class="text-btn" id="toggle-tafseer" type="button" aria-expanded="false" aria-controls="tafseer-panel">
-          التفسير الميسّر
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
-        </button>
+        <div class="meta-row">
+          <label class="reciter-select" title="القارئ">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+            <select id="reciter-select" aria-label="القارئ"></select>
+            <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+          </label>
+          <button class="text-btn" id="copy-ayah" type="button" title="نسخ الآية (C)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h8" /></svg>
+            <span>نسخ</span>
+          </button>
+          <button class="text-btn" id="toggle-tafseer" type="button" aria-expanded="false" aria-controls="tafseer-panel">
+            التفسير الميسّر
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+          </button>
+        </div>
         <div class="tafseer" id="tafseer-panel" hidden>
           <p id="tafseer"></p>
         </div>
@@ -51,7 +74,7 @@
     </main>
 
     <footer class="bottom">
-      <section class="prayers" aria-label="مواقيت الصلاة">
+      <section class="prayers" id="prayers" aria-label="مواقيت الصلاة">
         <div class="next-prayer" id="next-prayer" hidden>
           <span class="next-label">الصلاة القادمة</span>
           <strong id="next-prayer-name"></strong>
@@ -64,7 +87,98 @@
       </section>
 
       <button class="dekr" id="random-dekr" type="button" title="ذكر آخر"></button>
+      <a class="credit" id="photo-credit" target="_blank" rel="noopener" hidden></a>
     </footer>
+
+    <dialog class="settings" id="settings" aria-labelledby="settings-title">
+      <form method="dialog" class="settings-inner" tabindex="-1" autofocus>
+        <header class="settings-head">
+          <h2 id="settings-title">الإعدادات</h2>
+          <button class="icon-btn small" value="close" aria-label="إغلاق">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+          </button>
+        </header>
+
+        <section class="group">
+          <h3>العرض</h3>
+          <label class="opt">
+            <span>تغيير الصورة تلقائيًا</span>
+            <select data-setting="photoInterval" data-type="number">
+              <option value="0">أبدًا</option>
+              <option value="1">كل دقيقة</option>
+              <option value="3">كل ٣ دقائق</option>
+              <option value="5">كل ٥ دقائق</option>
+              <option value="10">كل ١٠ دقائق</option>
+              <option value="30">كل ٣٠ دقيقة</option>
+            </select>
+          </label>
+          <label class="opt">
+            <span>
+              حركة الصورة
+              <small>انسياب بطيء للخلفية</small>
+            </span>
+            <input type="checkbox" class="switch" role="switch" data-setting="photoMotion" />
+          </label>
+          <label class="opt">
+            <span>
+              أكمل من آخر آية قرأتها
+              <small>بدلًا من آية عشوائية في كل تبويب</small>
+            </span>
+            <input type="checkbox" class="switch" role="switch" data-setting="continueReading" />
+          </label>
+          <label class="opt">
+            <span>إظهار التفسير تلقائيًا</span>
+            <input type="checkbox" class="switch" role="switch" data-setting="showTafseer" />
+          </label>
+          <label class="opt">
+            <span>إظهار مواقيت الصلاة</span>
+            <input type="checkbox" class="switch" role="switch" data-setting="showPrayers" />
+          </label>
+          <label class="opt">
+            <span>إظهار الذكر أسفل الصفحة</span>
+            <input type="checkbox" class="switch" role="switch" data-setting="showDekr" />
+          </label>
+          <label class="opt">
+            <span>نظام ١٢ ساعة</span>
+            <input type="checkbox" class="switch" role="switch" data-setting="clock12" />
+          </label>
+        </section>
+
+        <section class="group">
+          <h3>مواقيت الصلاة</h3>
+          <label class="opt">
+            <span>طريقة الحساب</span>
+            <select data-setting="method">
+              <option value="auto">تلقائي حسب الموقع</option>
+              <option value="21">المغرب</option>
+              <option value="4">أم القرى</option>
+              <option value="3">رابطة العالم الإسلامي</option>
+              <option value="5">الهيئة المصرية العامة للمساحة</option>
+              <option value="1">جامعة العلوم الإسلامية بكراتشي</option>
+              <option value="2">أمريكا الشمالية (ISNA)</option>
+              <option value="16">دبي</option>
+              <option value="8">دول الخليج</option>
+              <option value="12">فرنسا (UOIF)</option>
+              <option value="13">تركيا (ديانت)</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="group">
+          <h3>اختصارات لوحة المفاتيح</h3>
+          <dl class="shortcuts">
+            <div><dt><kbd>Space</kbd></dt><dd>تشغيل / إيقاف</dd></div>
+            <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>الآية التالية / السابقة</dd></div>
+            <div><dt><kbd>T</kbd></dt><dd>التفسير</dd></div>
+            <div><dt><kbd>C</kbd></dt><dd>نسخ الآية</dd></div>
+            <div><dt><kbd>B</kbd></dt><dd>صورة أخرى</dd></div>
+            <div><dt><kbd>S</kbd></dt><dd>الإعدادات</dd></div>
+          </dl>
+        </section>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="newtab.js"></script>
   </body>
