@@ -8,27 +8,53 @@
   </head>
   <body>
     <header class="header">
-      <img src="./images/icon.png" alt="" width="36" height="36" />
+      <img src="./images/icon.png" alt="" width="40" height="40" />
       <div>
         <h1>ذكرني</h1>
         <p class="tagline">ذكرٌ يصلك وأنت تتصفّح</p>
       </div>
+      <div class="theme" id="theme" role="radiogroup" aria-label="المظهر">
+        <button type="button" role="radio" data-theme="auto" title="تلقائي حسب النظام" aria-label="تلقائي">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
+        </button>
+        <button type="button" role="radio" data-theme="light" title="فاتح" aria-label="فاتح">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+        </button>
+        <button type="button" role="radio" data-theme="dark" title="داكن" aria-label="داكن">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+        </button>
+      </div>
     </header>
 
     <main>
-      <label class="row switch-row">
-        <span>
-          <strong>التذكيرات</strong>
-          <small id="reminder-summary"></small>
-        </span>
-        <input type="checkbox" id="reminders-enabled" class="switch" role="switch" />
-      </label>
+      <figure class="preview" aria-live="polite">
+        <figcaption>
+          <span id="preview-category">&nbsp;</span>
+          <button type="button" id="preview-next" class="ghost icon" title="ذكر آخر" aria-label="ذكر آخر">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4" /></svg>
+          </button>
+        </figcaption>
+        <blockquote id="preview-text"><span class="skeleton"></span><span class="skeleton short"></span></blockquote>
+      </figure>
 
-      <fieldset id="reminder-controls">
+      <section class="card">
+        <div class="row">
+          <label class="row-label" for="reminders-enabled">
+            <strong>التذكيرات</strong>
+            <small id="reminder-summary"></small>
+          </label>
+          <button type="button" id="snooze" class="ghost icon" title="إيقاف مؤقت لساعة" aria-label="إيقاف مؤقت لساعة" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2M5 3L2 6M19 3l3 3" /></svg>
+          </button>
+          <input type="checkbox" id="reminders-enabled" class="switch" role="switch" />
+        </div>
+      </section>
+
+      <fieldset id="reminder-controls" class="card">
         <label class="field">
           <span class="field-label">نوع الذكر</span>
           <select id="dekr-type">
-            <option value="random">ذكر عشوائي</option>
+            <option value="random">ذكر عشوائي من كل الأنواع</option>
             <option value="m">أذكار الصباح</option>
             <option value="e">أذكار المساء</option>
             <option value="qd">أدعية قرآنية</option>
@@ -42,21 +68,23 @@
 
         <div class="field">
           <span class="field-label" id="interval-label">ذكّرني كل</span>
-          <div class="interval" role="group" aria-labelledby="interval-label">
-            <div class="presets" id="presets">
-              <button type="button" data-minutes="5">٥ د</button>
-              <button type="button" data-minutes="15">١٥ د</button>
-              <button type="button" data-minutes="30">٣٠ د</button>
-              <button type="button" data-minutes="60">ساعة</button>
-            </div>
-            <label class="custom">
-              <input type="number" id="minutes" min="1" max="1440" inputmode="numeric" aria-label="عدد الدقائق" />
-              <span>دقيقة</span>
-            </label>
+          <div class="presets" id="presets" role="radiogroup" aria-labelledby="interval-label">
+            <button type="button" role="radio" data-minutes="5">٥ دقائق</button>
+            <button type="button" role="radio" data-minutes="15">ربع ساعة</button>
+            <button type="button" role="radio" data-minutes="30">نصف ساعة</button>
+            <button type="button" role="radio" data-minutes="60">ساعة</button>
           </div>
+          <label class="custom" id="custom">
+            <span>أو كل</span>
+            <input type="number" id="minutes" min="1" max="1440" inputmode="numeric" aria-label="عدد الدقائق" />
+            <span>دقيقة</span>
+          </label>
         </div>
 
-        <button type="button" id="test" class="secondary">جرّب تذكيرًا الآن</button>
+        <button type="button" id="test" class="secondary">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg>
+          جرّب تذكيرًا الآن
+        </button>
       </fieldset>
 
       <p id="status" class="status" role="status" aria-live="polite"></p>

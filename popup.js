@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const ALARM_NAME = "dekr-reminder";
+  const PRESETS = [5, 15, 30, 60];
   const $ = (id) => document.getElementById(id);
   const els = {
     enabled: $("reminders-enabled"),
@@ -6,19 +8,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     type: $("dekr-type"),
     minutes: $("minutes"),
     presets: $("presets"),
+    custom: $("custom"),
     summary: $("reminder-summary"),
+    snooze: $("snooze"),
     test: $("test"),
     status: $("status"),
+    previewCategory: $("preview-category"),
+    previewText: $("preview-text"),
+    previewNext: $("preview-next"),
+    theme: $("theme"),
   };
 
   let statusTimer;
   let saveTimer;
+  let snoozedUntil = 0;
+
+  const arabic = (n) => Number(n).toLocaleString("ar-EG");
 
   function showStatus(message, isError = false) {
     clearTimeout(statusTimer);
     els.status.textContent = message;
     els.status.classList.toggle("error", isError);
-    statusTimer = setTimeout(() => (els.status.textContent = ""), 2500);
+    statusTimer = setTimeout(() => (els.status.textContent = ""), message.length > 20 ? 4500 : 2000);
   }
 
   function readSettings() {
@@ -29,27 +40,55 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
-  function formatInterval(minutes) {
-    if (minutes === 60) return "ساعة";
-    if (minutes % 60 === 0) return `${(minutes / 60).toLocaleString("ar-EG")} ساعات`;
-    return `${minutes.toLocaleString("ar-EG")} ${minutes <= 10 && minutes > 2 ? "دقائق" : "دقيقة"}`;
+  function formatDuration(minutes) {
+    if (minutes < 1) return "أقل من دقيقة";
+    if (minutes === 1) return "دقيقة";
+    if (minutes === 2) return "دقيقتين";
+    if (minutes < 60) return `${arabic(minutes)} ${minutes <= 10 ? "دقائق" : "دقيقة"}`;
+    const hours = Math.round(minutes / 60);
+    if (hours === 1) return "ساعة";
+    if (hours === 2) return "ساعتين";
+    return `${arabic(hours)} ${hours <= 10 ? "ساعات" : "ساعة"}`;
   }
 
-  function render({ minutes, remindersEnabled }) {
+  async function renderSummary() {
+    const { remindersEnabled } = readSettings();
+    if (!remindersEnabled) {
+      els.summary.textContent = "متوقفة";
+      return;
+    }
+    if (snoozedUntil > Date.now()) {
+      els.summary.textContent = `متوقفة مؤقتًا، تعود بعد ${formatDuration(Math.ceil((snoozedUntil - Date.now()) / 60000))}`;
+      return;
+    }
+    const alarm = await chrome.alarms.get(ALARM_NAME);
+    const left = alarm ? Math.ceil((alarm.scheduledTime - Date.now()) / 60000) : null;
+    els.summary.textContent = left === null ? `كل ${formatDuration(readSettings().minutes)}` : `التذكير القادم بعد ${formatDuration(left)}`;
+  }
+
+  function render() {
+    const { minutes, remindersEnabled } = readSettings();
     els.controls.disabled = !remindersEnabled;
-    els.summary.textContent = remindersEnabled ? `كل ${formatInterval(minutes)}` : "متوقفة";
+    els.snooze.hidden = !remindersEnabled;
+    els.custom.classList.toggle("active", !PRESETS.includes(minutes));
     els.presets.querySelectorAll("button").forEach((button) => {
-      button.setAttribute("aria-pressed", String(Number(button.dataset.minutes) === minutes));
+      button.setAttribute("aria-checked", String(Number(button.dataset.minutes) === minutes));
     });
+    const snoozed = snoozedUntil > Date.now();
+    const snoozeLabel = snoozed ? "استئناف التذكيرات الآن" : "إيقاف مؤقت لساعة";
+    els.snooze.setAttribute("aria-pressed", String(snoozed));
+    els.snooze.setAttribute("aria-label", snoozeLabel);
+    els.snooze.title = snoozeLabel;
+    renderSummary();
   }
 
   async function save() {
     const settings = readSettings();
     els.minutes.value = settings.minutes;
-    render(settings);
     try {
       const response = await chrome.runtime.sendMessage({ action: "saveSettings", settings });
       if (!response?.success) throw new Error(response?.error);
+      render();
       showStatus("تم الحفظ");
     } catch (error) {
       console.error(error);
@@ -57,8 +96,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function applyTheme(theme) {
+    if (theme === "auto") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = theme;
+    els.theme.querySelectorAll("button").forEach((button) => {
+      button.setAttribute("aria-checked", String(button.dataset.theme === theme));
+    });
+  }
+
+  async function loadPreview() {
+    els.previewText.classList.add("fading");
+    const response = await chrome.runtime.sendMessage({ action: "previewDekr", dekrType: els.type.value });
+    const dekr = response?.dekr;
+    els.previewCategory.textContent = dekr?.category ?? "";
+    els.previewText.textContent = dekr?.content ?? "تعذّر تحميل الذكر";
+    els.previewText.classList.remove("fading");
+  }
+
   els.enabled.addEventListener("change", save);
-  els.type.addEventListener("change", save);
+  els.type.addEventListener("change", () => {
+    save();
+    loadPreview();
+  });
   els.minutes.addEventListener("input", () => {
     clearTimeout(saveTimer);
     saveTimer = setTimeout(save, 600);
@@ -73,14 +132,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     els.minutes.value = button.dataset.minutes;
     save();
   });
+  els.snooze.addEventListener("click", async () => {
+    snoozedUntil = snoozedUntil > Date.now() ? 0 : Date.now() + 60 * 60 * 1000;
+    await chrome.storage.local.set({ snoozedUntil });
+    render();
+    showStatus(snoozedUntil ? "أوقفت التذكيرات لساعة" : "عادت التذكيرات");
+  });
+  els.previewNext.addEventListener("click", loadPreview);
+  els.theme.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-theme]");
+    if (!button) return;
+    applyTheme(button.dataset.theme);
+    chrome.storage.sync.set({ popupTheme: button.dataset.theme });
+  });
   els.test.addEventListener("click", async () => {
     const response = await chrome.runtime.sendMessage({ action: "testNotification", dekrType: els.type.value });
-    showStatus(response?.success ? "أُرسل التذكير" : "تحقّق من إذن الإشعارات في المتصفح", !response?.success);
+    showStatus(
+      response?.success ? "أُرسل التذكير. لم يظهر؟ فعّل إشعارات المتصفح من إعدادات النظام" : "تعذّر الإرسال، تحقّق من إذن الإشعارات",
+      !response?.success
+    );
   });
 
-  const data = await chrome.storage.sync.get(["dekrType", "minutes", "remindersEnabled"]);
+  const [data, local] = await Promise.all([
+    chrome.storage.sync.get(["dekrType", "minutes", "remindersEnabled", "popupTheme"]),
+    chrome.storage.local.get("snoozedUntil"),
+  ]);
+  applyTheme(data.popupTheme || "auto");
   els.type.value = data.dekrType || "random";
   els.minutes.value = data.minutes || 5;
   els.enabled.checked = data.remindersEnabled !== false;
-  render(readSettings());
+  snoozedUntil = local.snoozedUntil || 0;
+  render();
+  loadPreview();
+  setInterval(renderSummary, 30000);
 });

@@ -78,6 +78,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     })();
     return true;
   }
+  if (request.action === "previewDekr") {
+    (async () => {
+      if (!dataLoaded) await loadAdkarData();
+      sendResponse({ dekr: await getRandomAdkar(request.dekrType || "random") });
+    })();
+    return true;
+  }
   if (request.action === "testNotification") {
     showNotification(request.dekrType)
       .then((success) => sendResponse({ success }))
@@ -91,7 +98,8 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     const { remindersEnabled } = await chrome.storage.sync.get(
       "remindersEnabled"
     );
-    if (remindersEnabled) {
+    const { snoozedUntil } = await chrome.storage.local.get("snoozedUntil");
+    if (remindersEnabled && !(snoozedUntil > Date.now())) {
       showNotification();
     }
   }
