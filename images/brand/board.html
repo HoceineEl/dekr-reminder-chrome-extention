@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: "Quran"; src: url("../../newtab/fonts/_PDMS_Saleem_QuranFont.ttf"); }
+  * { box-sizing: border-box; }
+  body { margin: 0; width: 1600px; height: 1000px; padding: 28px; background: #161816; font-family: -apple-system, "SF Arabic", system-ui, sans-serif; color: #eef6f1; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 20px; height: 100%; }
+  .p { position: relative; overflow: hidden; border-radius: 18px; background: #0d1f19; }
+  .label { position: absolute; left: 22px; bottom: 18px; font: 500 12px/1 ui-monospace, Menlo, monospace; letter-spacing: .08em; color: #7fa594; }
+  .num { position: absolute; right: 22px; bottom: 18px; font: 500 12px/1 ui-monospace, Menlo, monospace; color: #4c6b5e; }
+  .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+  .brand { font-family: "Quran"; font-size: 84px; color: #a6f3cd; line-height: 1.1; direction: rtl; }
+  .latin { font-size: 22px; letter-spacing: .32em; color: #cfe3d8; font-weight: 500; }
+  .construct { background: #0a1a15; }
+  .toolbar { position: absolute; left: 34px; right: 34px; top: 70px; height: 54px; border-radius: 14px; background: #2a2d2b; display: flex; align-items: center; gap: 16px; padding: 0 18px; }
+  .omni { flex: 1; height: 32px; border-radius: 999px; background: #1c1e1d; color: #9aa59f; font-size: 14px; display: flex; align-items: center; padding: 0 16px; }
+  .ext { width: 26px; height: 26px; border-radius: 7px; background: #3b3f3d; }
+  .popup { position: absolute; right: 34px; top: 136px; width: 300px; border-radius: 16px; background: #182320; border: 1px solid #2b3a34; padding: 16px; direction: rtl; }
+  .popup-head { display: flex; align-items: center; gap: 12px; }
+  .popup-head b { font-size: 20px; }
+  .popup-head span { display: block; font-size: 13px; color: #9fb7ab; }
+  .dekr { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #24453a; font-size: 15px; line-height: 1.8; color: #e9f5ee; }
+  .photo { background: url("../../newtab/images/1.jpeg") center/cover; }
+  .photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(5,20,15,.35), rgba(5,20,15,.85)); }
+  .photo .center { z-index: 1; }
+  .ayah { font-family: "Quran"; font-size: 40px; color: #f2f7f4; direction: rtl; text-align: center; line-height: 1.8; }
+  .swatches { position: absolute; inset: 34px 34px 56px; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 10px; }
+  .sw { border-radius: 12px; padding: 14px; display: flex; flex-direction: column; justify-content: flex-end; font: 500 13px/1.5 ui-monospace, Menlo, monospace; }
+  .tag { font-size: 46px; font-weight: 700; direction: rtl; text-align: center; line-height: 1.5; }
+  .tag em { color: #6fe3b0; font-style: normal; }
+  .sizes { display: flex; align-items: flex-end; gap: 22px; }
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="p">
+    <div class="center">
+      <img src="../logo.svg" width="170" height="170">
+      <div class="brand">ذكرني</div>
+      <div class="latin">REMIND ME</div>
+    </div>
+    <span class="label">LOGO</span><span class="num">01</span>
+  </div>
+
+  <div class="p construct">
+    <svg viewBox="0 0 128 128" width="360" height="360" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%)">
+      <g fill="none" stroke="#2e5a4a" stroke-width=".4">
+        <circle cx="64" cy="64" r="38" stroke-dasharray="1.5 1.5"/>
+        <circle cx="64" cy="64" r="23.6"/>
+        <line x1="64" y1="10" x2="64" y2="118"/>
+        <line x1="10" y1="64" x2="118" y2="64"/>
+        <line x1="64" y1="64" x2="95" y2="42" stroke-dasharray="1 1"/>
+        <line x1="64" y1="64" x2="95" y2="86" stroke-dasharray="1 1"/>
+      </g>
+      <image href="mark-only.svg" x="0" y="0" width="128" height="128"/>
+      <text x="100" y="40" font-size="4" fill="#7fa594" font-family="Menlo">35°</text>
+      <text x="100" y="92" font-size="4" fill="#7fa594" font-family="Menlo">325°</text>
+      <text x="96" y="70" font-size="4" fill="#7fa594" font-family="Menlo">العدّ</text>
+    </svg>
+    <span class="label">CONSTRUCTION · 15 BEADS · TAPERED ARC</span><span class="num">02</span>
+  </div>
+
+  <div class="p" style="background:#111513">
+    <div class="toolbar">
+      <span class="omni">chrome://newtab</span>
+      <span class="ext"></span><span class="ext"></span>
+      <img src="../logo-small.svg" width="26" height="26">
+    </div>
+    <div class="popup">
+      <div class="popup-head"><img src="../logo.svg" width="40" height="40"><div><b>ذكرني</b><span>ذكرٌ يصلك وأنت تتصفّح</span></div></div>
+      <div class="dekr">سُبْحَانَ اللهِ وَبِحَمْدِهِ</div>
+    </div>
+    <div class="sizes" style="position:absolute;left:34px;bottom:56px">
+      <img src="../logo.svg" width="64" height="64"><img src="../logo.svg" width="48" height="48"><img src="../logo-small.svg" width="32" height="32"><img src="../logo-small.svg" width="16" height="16">
+    </div>
+    <span class="label">TOOLBAR · 64 / 48 / 32 / 16</span><span class="num">03</span>
+  </div>
+
+  <div class="p photo">
+    <div class="center">
+      <img src="mark-only.svg" width="90" height="90">
+      <div class="ayah">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</div>
+    </div>
+    <span class="label" style="z-index:1">NEW TAB</span><span class="num" style="z-index:1">04</span>
+  </div>
+
+  <div class="p" style="background:#101a16">
+    <div class="swatches">
+      <div class="sw" style="grid-row:span 2;background:#0a221a;color:#9fb7ab">Night Green<br>#0A221A</div>
+      <div class="sw" style="background:#1d4d3c;color:#cfe3d8">Forest<br>#1D4D3C</div>
+      <div class="sw" style="background:#4fd497;color:#0a221a">Mint<br>#4FD497</div>
+      <div class="sw" style="background:#a6f3cd;color:#0a221a">Light Mint<br>#A6F3CD</div>
+      <div class="sw" style="background:#f2f7f4;color:#0a221a">Mist<br>#F2F7F4</div>
+    </div>
+    <span class="label">COLOR</span><span class="num">05</span>
+  </div>
+
+  <div class="p" style="background:#0a221a">
+    <div class="center">
+      <div class="tag">كل تبويب جديد<br><em>لحظةٌ مع القرآن</em></div>
+    </div>
+    <span class="label">PROMISE</span><span class="num">06</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+ذكرني — Remind Me turns every new tab into a quiet moment with the Quran, and sends you gentle adhkar reminders while you browse.
+
+━━━━━━━━━━━━━━━━━━━━
+
+📖 A NEW TAB WITH THE QURAN
+• A new ayah on every tab, in clear Uthmani script with its number
+• Listen instantly: 22 reciters, including Al-Minshawi, Al-Husary, Abdul Basit, Al-Afasy, Maher Al-Muaiqly, Yasser Al-Dossari, Al-Sudais and Al-Shuraim
+• Murattal, Mujawwad, the Husary teaching recitation, and three Warsh recitations
+• Keep listening: recitation moves to the next ayah automatically
+• Al-Tafsir Al-Muyassar for every ayah, one click away
+• Copy any ayah with its surah name
+• Optionally continue from the last ayah you read
+
+🕌 PRAYER TIMES AT A GLANCE
+• Today's five prayers with a live countdown to the next one
+• Hijri and Gregorian dates
+• Choose your calculation method (Morocco, Umm Al-Qura, MWL, Egypt, ISNA, Gulf, and more)
+
+🔔 ADHKAR REMINDERS
+• A short dhikr reminder every 5, 15, 30 or 60 minutes, or any interval you choose
+• Pick the type: morning, evening, after prayer, before sleep, Quranic duas, duas of the prophets, or a random mix
+• Pause reminders for an hour with one click
+• Preview a dhikr right inside the popup
+
+🌿 CALM BY DESIGN
+• Nature photography (mountains, forests, lakes and waterfalls) that slowly drifts and changes on its own
+• Light and dark appearance for the popup
+• Arabic, right-to-left interface
+• Keyboard shortcuts: Space to play, arrows to move between ayahs, T for tafsir, B for a new photo, S for settings
+
+🔒 PRIVATE
+No account, no ads, no tracking. Your settings stay in your browser. Location is used only to calculate prayer times.
+
+━━━━━━━━━━━━━━━━━━━━
+
+ذكرني: كل تبويب جديد لحظةٌ مع القرآن، وتذكيرٌ لطيف بالأذكار أثناء تصفّحك.
+
+📖 القرآن في كل تبويب
+• آية جديدة في كل تبويب بالرسم العثماني مع رقمها
+• استمع فورًا بصوت ٢٢ قارئًا، منهم المنشاوي والحصري وعبد الباسط والعفاسي وماهر المعيقلي وياسر الدوسري والسديس والشريم
+• المرتّل والمجوّد، ومصحف الحصري المعلّم، وثلاث قراءات برواية ورش
+• تنتقل التلاوة إلى الآية التالية تلقائيًا
+• التفسير الميسّر لكل آية بضغطة واحدة
+• انسخ الآية مع اسم سورتها
+• أكمل من آخر آية قرأتها إن شئت
+
+🕌 مواقيت الصلاة
+• الصلوات الخمس مع عدّ تنازلي للصلاة القادمة
+• التاريخ الهجري والميلادي
+• اختر طريقة الحساب: المغرب، أم القرى، رابطة العالم الإسلامي، مصر، وغيرها
+
+🔔 تذكير بالأذكار
+• ذكرٌ قصير كل ٥ أو ١٥ أو ٣٠ أو ٦٠ دقيقة، أو المدة التي تختارها
+• أذكار الصباح والمساء، وأذكار بعد الصلاة، وأذكار النوم، وأدعية من القرآن، وأدعية الأنبياء، أو مزيج عشوائي
+• أوقف التذكير ساعةً بضغطة واحدة
+
+🌿 هدوء في التصميم
+• صور من الطبيعة تتحرك ببطء وتتغير وحدها
+• مظهر فاتح وداكن
+• واجهة عربية كاملة
+
+🔒 خصوصيتك محفوظة
+بلا حساب ولا إعلانات ولا تتبّع. تبقى إعداداتك في متصفحك، ويُستخدم موقعك لحساب مواقيت الصلاة فقط.

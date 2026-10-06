@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const TOTAL_AYAHS = 6236;
-  const LOCAL_IMAGES = 18;
+  const LOCAL_IMAGES = 4;
   const QURAN_API = "https://api.alquran.cloud/v1/ayah";
   const AUDIO_CDN = "https://everyayah.com/data";
   const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
