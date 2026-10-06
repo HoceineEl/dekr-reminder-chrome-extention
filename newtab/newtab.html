@@ -9,6 +9,7 @@
 
   <body>
     <div class="backdrop" aria-hidden="true">
+      <div class="photo-preview" id="photo-preview"></div>
       <div class="photo" id="photo-a"></div>
       <div class="photo" id="photo-b"></div>
     </div>
@@ -34,9 +35,13 @@
     </header>
 
     <main class="stage">
-      <article class="ayah" id="ayah" aria-busy="true" aria-live="polite">
-        <h1 class="surah" id="surah-name"></h1>
-        <p class="ayah-text" id="text">&nbsp;</p>
+      <article class="ayah initial" id="ayah" aria-busy="true" aria-live="polite">
+        <div class="ayah-progress" aria-hidden="true"></div>
+        <h1 class="surah" id="surah-name"><span class="skeleton sk-surah"></span></h1>
+        <p class="ayah-text" id="text">
+          <span class="skeleton sk-line"></span>
+          <span class="skeleton sk-line short"></span>
+        </p>
 
         <div class="controls">
           <button class="icon-btn" id="previous" type="button" aria-label="الآية السابقة" title="الآية السابقة (→)">
@@ -67,9 +72,18 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
           </button>
         </div>
-        <div class="tafseer" id="tafseer-panel" hidden>
-          <p id="tafseer"></p>
-        </div>
+        <section class="tafseer" id="tafseer-panel" aria-labelledby="tafseer-title" hidden>
+          <header class="tafseer-head">
+            <h2 id="tafseer-title">التفسير الميسّر</h2>
+            <span class="tafseer-ref" id="tafseer-ref"></span>
+            <button class="icon-btn small" id="close-tafseer" type="button" aria-label="إخفاء التفسير" title="إخفاء التفسير (T)">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+            </button>
+          </header>
+          <div class="tafseer-body" id="tafseer-body" tabindex="0">
+            <p id="tafseer"></p>
+          </div>
+        </section>
       </article>
     </main>
 
@@ -81,7 +95,11 @@
           <span id="countdown" class="countdown" dir="ltr">--:--:--</span>
         </div>
         <ol class="prayer-list" id="prayer-list">
-          <li class="prayer-status">جارٍ تحميل مواقيت الصلاة…</li>
+          <li class="prayer skeleton-pill" aria-hidden="true"></li>
+          <li class="prayer skeleton-pill" aria-hidden="true"></li>
+          <li class="prayer skeleton-pill" aria-hidden="true"></li>
+          <li class="prayer skeleton-pill" aria-hidden="true"></li>
+          <li class="prayer skeleton-pill" aria-hidden="true"></li>
         </ol>
         <p class="location" id="prayer-location"></p>
       </section>

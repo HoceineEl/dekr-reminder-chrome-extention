@@ -77,6 +77,20 @@ button {
     linear-gradient(to bottom, oklch(0.1 0.01 160 / 0.45), transparent 30%, transparent 55%, oklch(0.08 0.01 160 / 0.9));
 }
 
+.photo-preview {
+  position: absolute;
+  inset: -40px;
+  background-size: cover;
+  background-position: center;
+  filter: blur(24px) saturate(1.1);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+.photo-preview.ready {
+  opacity: 1;
+}
+
 .photo {
   position: absolute;
   inset: 0;
@@ -165,9 +179,105 @@ button {
   transition: opacity 0.35s var(--ease);
 }
 
-.ayah[aria-busy="true"] .surah,
-.ayah[aria-busy="true"] .ayah-text {
-  opacity: 0.35;
+.ayah {
+  position: relative;
+}
+
+.ayah[aria-busy="true"]:not(.initial) .surah,
+.ayah[aria-busy="true"]:not(.initial) .ayah-text {
+  opacity: 0.45;
+}
+
+.ayah-progress {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  width: 120px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 0.2s var(--ease) 0.15s;
+}
+
+.ayah-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  border-radius: inherit;
+  background: var(--accent);
+  animation: indeterminate 1s var(--ease) infinite;
+}
+
+.ayah[aria-busy="true"]:not(.initial) .ayah-progress {
+  opacity: 1;
+}
+
+@keyframes indeterminate {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+
+.ayah.entering .surah,
+.ayah.entering .ayah-text,
+.ayah.entering .tafseer p {
+  animation: content-in 0.45s var(--ease);
+}
+
+@keyframes content-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+    filter: blur(4px);
+  }
+}
+
+.skeleton {
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.08) 25%, oklch(1 0 0 / 0.18) 50%, oklch(1 0 0 / 0.08) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+.sk-surah {
+  width: 140px;
+  height: 0.9em;
+  margin-inline: auto;
+}
+
+.sk-line {
+  width: min(640px, 80vw);
+  height: 0.55em;
+  margin: 0.6em auto;
+}
+
+.sk-line.short {
+  width: min(380px, 50vw);
+}
+
+.skeleton-pill {
+  width: 78px;
+  height: 52px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, oklch(1 0 0 / 0.06) 25%, oklch(1 0 0 / 0.14) 50%, oklch(1 0 0 / 0.06) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 
 .surah {
@@ -180,6 +290,7 @@ button {
 }
 
 .ayah-text {
+  max-width: 26em;
   margin: 0;
   font-family: "quran", serif;
   font-size: clamp(1.75rem, 2.9vw, 2.75rem);
@@ -251,12 +362,29 @@ button {
 }
 
 .play-btn {
+  --progress: 0;
   position: relative;
   width: 64px;
   height: 64px;
   border-color: transparent;
   background: var(--accent);
   color: var(--accent-ink);
+}
+
+.play-btn::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--progress) * 360deg), oklch(1 0 0 / 0.14) 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+}
+
+.play-btn.playing::before,
+.play-btn.loading::before {
+  opacity: 1;
 }
 
 .play-btn:hover {
@@ -330,28 +458,79 @@ button {
 }
 
 .tafseer {
-  max-width: 70ch;
+  display: flex;
+  flex-direction: column;
   flex: 0 1 auto;
-  min-height: 96px;
-  max-height: 320px;
-  scrollbar-width: thin;
-  scrollbar-color: oklch(1 0 0 / 0.25) transparent;
   width: 100%;
-  margin: 12px auto 0;
-  padding: 18px 22px;
-  overflow-y: auto;
+  max-width: 72ch;
+  min-height: 120px;
+  max-height: 360px;
+  margin: 16px auto 0;
+  overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: var(--surface-strong);
   text-align: start;
   animation: reveal 0.35s var(--ease);
 }
 
+.tafseer-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 8px 18px;
+  padding-inline: 20px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tafseer-head h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.tafseer-ref {
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+}
+
+.tafseer-head .icon-btn {
+  margin-inline-start: auto;
+  border-color: transparent;
+}
+
+.tafseer-body {
+  min-height: 0;
+  overflow-anchor: none;
+  padding: 16px 22px 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: oklch(1 0 0 / 0.25) transparent;
+  outline: none;
+}
+
+.tafseer-body.fade-end {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 48px), transparent);
+}
+
+.tafseer-body.fade-start {
+  mask-image: linear-gradient(to bottom, transparent, #000 32px);
+}
+
+.tafseer-body.fade-start.fade-end {
+  mask-image: linear-gradient(to bottom, transparent, #000 32px, #000 calc(100% - 48px), transparent);
+}
+
+.tafseer-body:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
 .tafseer p {
   margin: 0;
-  color: var(--ink-soft);
-  font-size: 1.05rem;
-  line-height: 1.9;
+  color: var(--ink);
+  font-size: 1.12rem;
+  line-height: 2.05;
   text-wrap: pretty;
 }
 
@@ -507,6 +686,15 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .skeleton-pill,
+  .ayah-progress::after,
+  .ayah.entering .surah,
+  .ayah.entering .ayah-text,
+  .ayah.entering .tafseer p {
+    animation: none;
+  }
+
   .photo-motion .photo {
     animation: none;
   }

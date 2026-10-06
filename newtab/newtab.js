@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "Husary_128kbps_Mujawwad", name: "محمود خليل الحصري", group: "mujawwad" },
     { id: "Minshawy_Mujawwad_192kbps", name: "محمد صديق المنشاوي", group: "mujawwad" },
     { id: "Mohammad_al_Tablaway_128kbps", name: "محمد محمود الطبلاوي", group: "mujawwad" },
-    { id: "Mustafa_Ismail_48kbps", name: "مصطفى إسماعيل", group: "mujawwad" },
+    { id: "Mustafa_Ismail_48kbps", name: "مصطفى إسماعيل (مختارات)", group: "mujawwad" },
     { id: "mahmoud_ali_al_banna_32kbps", name: "محمود علي البنا", group: "mujawwad" },
     { id: "Husary_Muallim_128kbps", name: "الحصري (المصحف المعلّم)", group: "muallim" },
     { id: "warsh/warsh_ibrahim_aldosary_128kbps", name: "إبراهيم الدوسري", group: "warsh" },
@@ -73,6 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
     tafseer: $("tafseer"),
     tafseerPanel: $("tafseer-panel"),
     tafseerToggle: $("toggle-tafseer"),
+    tafseerBody: $("tafseer-body"),
+    tafseerRef: $("tafseer-ref"),
+    closeTafseer: $("close-tafseer"),
     play: $("play"),
     next: $("next"),
     previous: $("previous"),
@@ -97,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   let settings = { ...DEFAULT_SETTINGS };
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let currentAyah = null;
   let requestId = 0;
   let autoAdvance = false;
@@ -167,7 +171,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderAyah(ayah) {
+    const first = currentAyah === null;
     currentAyah = ayah;
+    els.ayah.classList.remove("initial");
+    if (!first && !reducedMotion.matches) {
+      els.ayah.classList.remove("entering");
+      void els.ayah.offsetWidth;
+      els.ayah.classList.add("entering");
+    }
     els.surah.textContent = `سورة ${ayah.surah}`;
     els.text.textContent = ayah.text;
     const marker = document.createElement("span");
@@ -177,11 +188,19 @@ document.addEventListener("DOMContentLoaded", () => {
     els.text.append(" ", marker);
     els.text.classList.toggle("long", ayah.text.length > 420);
     els.tafseer.textContent = ayah.tafseer;
+    els.tafseerRef.textContent = `${ayah.surah} · ${toArabicDigits(ayah.numberInSurah)}`;
+    els.tafseerBody.scrollTop = 0;
+    updateTafseerFade();
+    els.play.style.setProperty("--progress", "0");
     audio.src = audioUrl(ayah);
   }
 
   function playAudio() {
     if (!currentAyah) return;
+    const fallback = RECITERS.find((r) => r.id === DEFAULT_SETTINGS.reciter);
+    if (reciter() !== fallback && audio.src === audioUrl(currentAyah, fallback)) {
+      showToast(`هذه الآية غير متوفرة بصوت ${reciter().name}، فتُتلى بصوت ${fallback.name}`);
+    }
     setPlayState("loading");
     audio.play().catch(() => setPlayState("paused"));
   }
@@ -218,9 +237,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   audio.addEventListener("playing", () => setPlayState("playing"));
+  audio.addEventListener("timeupdate", () => {
+    if (audio.duration) els.play.style.setProperty("--progress", (audio.currentTime / audio.duration).toFixed(4));
+  });
   audio.addEventListener("waiting", () => setPlayState("loading"));
   audio.addEventListener("pause", () => setPlayState("paused"));
-  audio.addEventListener("error", () => setPlayState("paused"));
+  audio.addEventListener("error", () => {
+    const fallback = RECITERS.find((r) => r.id === DEFAULT_SETTINGS.reciter);
+    const fallbackSrc = currentAyah && audioUrl(currentAyah, fallback);
+    if (!fallbackSrc || audio.src === fallbackSrc) return setPlayState("paused");
+    const wasRequested = els.play.classList.contains("loading") || autoAdvance;
+    audio.src = fallbackSrc;
+    if (wasRequested) playAudio();
+  });
   audio.addEventListener("ended", () => {
     if (photoDue) changePhoto();
     if (autoAdvance) loadAyah(currentAyah.number + 1, { play: true });
@@ -232,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimeout(toastTimer);
     els.toast.textContent = message;
     els.toast.classList.add("visible");
-    toastTimer = setTimeout(() => els.toast.classList.remove("visible"), 1800);
+    toastTimer = setTimeout(() => els.toast.classList.remove("visible"), message.length > 30 ? 3500 : 1800);
   }
 
   async function copyAyah() {
@@ -251,6 +280,18 @@ document.addEventListener("DOMContentLoaded", () => {
     els.tafseerPanel.hidden = !open;
     els.tafseerToggle.setAttribute("aria-expanded", String(open));
     els.ayah.classList.toggle("with-tafseer", open);
+    if (!open) return;
+    els.tafseerBody.scrollTop = 0;
+    requestAnimationFrame(() => {
+      els.tafseerBody.scrollTop = 0;
+      updateTafseerFade();
+    });
+  }
+
+  function updateTafseerFade() {
+    const { scrollTop, scrollHeight, clientHeight } = els.tafseerBody;
+    els.tafseerBody.classList.toggle("fade-end", scrollTop + clientHeight < scrollHeight - 4);
+    els.tafseerBody.classList.toggle("fade-start", scrollTop > 4);
   }
 
   function displayTime() {
@@ -293,11 +334,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let activePhoto = 0;
 
+  const tinyPhoto = (src) => (/\/\d+px-/.test(src) ? src.replace(/\/\d+px-/, "/64px-") : null);
+
   function showPhoto(photo) {
+    const next = els.photos[1 - activePhoto];
+    const tiny = tinyPhoto(photo.src);
+    if (tiny && !document.body.classList.contains("photo-loaded")) {
+      const preview = new Image();
+      preview.onload = () => {
+        if (document.body.classList.contains("photo-loaded")) return;
+        $("photo-preview").style.backgroundImage = `url("${tiny}")`;
+        $("photo-preview").classList.add("ready");
+      };
+      preview.src = tiny;
+    }
     return new Promise((resolve, reject) => {
       const image = new Image();
       image.onload = () => {
-        const next = els.photos[1 - activePhoto];
+        document.body.classList.add("photo-loaded");
         next.style.backgroundImage = `url("${photo.src}")`;
         next.style.setProperty("--drift-x", `${((Math.random() < 0.5 ? -1 : 1) * (3 + Math.random() * 3)).toFixed(2)}%`);
         next.style.setProperty("--drift-y", `${((Math.random() < 0.5 ? -1 : 1) * (1 + Math.random() * 2)).toFixed(2)}%`);
@@ -570,6 +624,12 @@ document.addEventListener("DOMContentLoaded", () => {
   els.next.addEventListener("click", () => step(1));
   els.previous.addEventListener("click", () => step(-1));
   els.tafseerToggle.addEventListener("click", () => setTafseer(els.tafseerPanel.hidden));
+  els.closeTafseer.addEventListener("click", () => {
+    setTafseer(false);
+    els.tafseerToggle.focus();
+  });
+  els.tafseerBody.addEventListener("scroll", updateTafseerFade, { passive: true });
+  window.addEventListener("resize", updateTafseerFade);
   els.nextPhoto.addEventListener("click", () => {
     changePhoto();
     schedulePhotoRotation();
