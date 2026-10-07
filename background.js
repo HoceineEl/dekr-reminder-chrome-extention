@@ -86,9 +86,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
   if (request.action === "testNotification") {
-    showNotification(request.dekrType)
-      .then((success) => sendResponse({ success }))
-      .catch((error) => sendResponse({ success: false, error: error.message }));
+    chrome.notifications.getPermissionLevel(async (level) => {
+      if (level !== "granted") return sendResponse({ success: false, blocked: true });
+      sendResponse({ success: await showNotification(request.dekrType).catch(() => false) });
+    });
     return true;
   }
 });

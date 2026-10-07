@@ -104,10 +104,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+  async function requestPreview(attempt = 0) {
+    try {
+      const response = await chrome.runtime.sendMessage({ action: "previewDekr", dekrType: els.type.value });
+      if (response?.dekr) return response.dekr;
+    } catch (error) {
+      console.warn("Preview request failed:", error);
+    }
+    if (attempt < 2) {
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      return requestPreview(attempt + 1);
+    }
+    const adkar = Object.values(await (await fetch("data/adkar.json")).json()).flat();
+    return adkar[Math.floor(Math.random() * adkar.length)];
+  }
+
   async function loadPreview() {
     els.previewText.classList.add("fading");
-    const response = await chrome.runtime.sendMessage({ action: "previewDekr", dekrType: els.type.value });
-    const dekr = response?.dekr;
+    const dekr = await requestPreview().catch(() => null);
     els.previewCategory.textContent = dekr?.category ?? "";
     els.previewText.textContent = dekr?.content ?? "تعذّر تحميل الذكر";
     els.previewText.classList.remove("fading");
@@ -148,7 +162,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   els.test.addEventListener("click", async () => {
     const response = await chrome.runtime.sendMessage({ action: "testNotification", dekrType: els.type.value });
     showStatus(
-      response?.success ? "أُرسل التذكير. لم يظهر؟ فعّل إشعارات المتصفح من إعدادات النظام" : "تعذّر الإرسال، تحقّق من إذن الإشعارات",
+      response?.success
+        ? "أُرسل التذكير. لم يظهر؟ فعّل إشعارات المتصفح من إعدادات النظام"
+        : response?.blocked
+          ? "الإشعارات محظورة لهذه الإضافة في المتصفح"
+          : "تعذّر الإرسال، أعد المحاولة",
       !response?.success
     );
   });
