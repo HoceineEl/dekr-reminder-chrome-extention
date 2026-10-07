@@ -623,9 +623,10 @@ document.addEventListener("DOMContentLoaded", () => {
   els.play.addEventListener("click", togglePlay);
   els.next.addEventListener("click", () => step(1));
   els.previous.addEventListener("click", () => step(-1));
-  els.tafseerToggle.addEventListener("click", () => setTafseer(els.tafseerPanel.hidden));
+  const rememberTafseer = (open) => saveSettings({ showTafseer: open });
+  els.tafseerToggle.addEventListener("click", () => rememberTafseer(els.tafseerPanel.hidden));
   els.closeTafseer.addEventListener("click", () => {
-    setTafseer(false);
+    rememberTafseer(false);
     els.tafseerToggle.focus();
   });
   els.tafseerBody.addEventListener("scroll", updateTafseerFade, { passive: true });
@@ -663,7 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (event.key === "ArrowRight") {
       step(-1);
     } else if (key === "t" || key === "ف") {
-      setTafseer(els.tafseerPanel.hidden);
+      rememberTafseer(els.tafseerPanel.hidden);
     } else if (key === "c" || key === "ؤ") {
       copyAyah();
     } else if (key === "b" || key === "لا") {

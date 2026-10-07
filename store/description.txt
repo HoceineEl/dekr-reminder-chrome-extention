@@ -1,63 +1,78 @@
-ذكرني — Remind Me turns every new tab into a quiet moment with the Quran, and sends you gentle adhkar reminders while you browse.
+SUMMARY (132 characters max, goes in manifest "description")
+A new tab with the Quran: an ayah, 22 reciters, tafsir and prayer times, plus gentle adhkar reminders while you browse.
 
-━━━━━━━━━━━━━━━━━━━━
+────────────────────────────────────────
 
-📖 A NEW TAB WITH THE QURAN
-• A new ayah on every tab, in clear Uthmani script with its number
-• Listen instantly: 22 reciters, including Al-Minshawi, Al-Husary, Abdul Basit, Al-Afasy, Maher Al-Muaiqly, Yasser Al-Dossari, Al-Sudais and Al-Shuraim
-• Murattal, Mujawwad, the Husary teaching recitation, and three Warsh recitations
-• Keep listening: recitation moves to the next ayah automatically
+DESCRIPTION
+
+You open dozens of tabs every day. Remind Me (ذكرني) makes each one a moment with the Quran.
+
+Every new tab shows an ayah in clear Uthmani script over calm nature photography. Press play to hear it, open the tafsir to understand it, and glance at the time left until the next prayer. While you browse, a short dhikr appears at the interval you choose.
+
+━━ THE QURAN IN EVERY TAB ━━
+• A new ayah each time, with its surah and number
+• More than 20 well-known reciters to choose from
+• Murattal, Mujawwad, the Husary teaching recitation, and Warsh recitations
+• Listen continuously: the recitation moves to the next ayah on its own
 • Al-Tafsir Al-Muyassar for every ayah, one click away
-• Copy any ayah with its surah name
-• Optionally continue from the last ayah you read
+• Copy any ayah with its reference
+• Pick up where you left off, or get a new ayah every time
 
-🕌 PRAYER TIMES AT A GLANCE
+━━ PRAYER TIMES ━━
 • Today's five prayers with a live countdown to the next one
-• Hijri and Gregorian dates
-• Choose your calculation method (Morocco, Umm Al-Qura, MWL, Egypt, ISNA, Gulf, and more)
+• Hijri and Gregorian date
+• A choice of calculation method for your country
 
-🔔 ADHKAR REMINDERS
-• A short dhikr reminder every 5, 15, 30 or 60 minutes, or any interval you choose
-• Pick the type: morning, evening, after prayer, before sleep, Quranic duas, duas of the prophets, or a random mix
-• Pause reminders for an hour with one click
-• Preview a dhikr right inside the popup
+━━ ADHKAR REMINDERS ━━
+• A short notification every 5, 15, 30 or 60 minutes, or any interval you set
+• Morning and evening adhkar, after prayer, before sleep, on waking, Quranic duas, duas of the prophets, or a mix
+• Pause for an hour with one click
+• Preview a dhikr right in the popup
 
-🌿 CALM BY DESIGN
-• Nature photography (mountains, forests, lakes and waterfalls) that slowly drifts and changes on its own
-• Light and dark appearance for the popup
-• Arabic, right-to-left interface
-• Keyboard shortcuts: Space to play, arrows to move between ayahs, T for tafsir, B for a new photo, S for settings
+━━ MADE TO BE CALM ━━
+• Nature photos (mountains, forests, lakes, waterfalls) that slowly drift and change
+• Fully Arabic, right-to-left interface with light and dark popup
+• Keyboard shortcuts: Space play · ← → next/previous ayah · T tafsir · C copy · B new photo · S settings
 
-🔒 PRIVATE
-No account, no ads, no tracking. Your settings stay in your browser. Location is used only to calculate prayer times.
+━━ PRIVATE BY DEFAULT ━━
+No account. No ads. No tracking. Your settings stay in your browser, and your location is used only to calculate prayer times.
 
-━━━━━━━━━━━━━━━━━━━━
+Free, and built as sadaqah jariyah. If it benefits you, please remember us in your duas.
 
-ذكرني: كل تبويب جديد لحظةٌ مع القرآن، وتذكيرٌ لطيف بالأذكار أثناء تصفّحك.
+────────────────────────────────────────
 
-📖 القرآن في كل تبويب
-• آية جديدة في كل تبويب بالرسم العثماني مع رقمها
-• استمع فورًا بصوت ٢٢ قارئًا، منهم المنشاوي والحصري وعبد الباسط والعفاسي وماهر المعيقلي وياسر الدوسري والسديس والشريم
-• المرتّل والمجوّد، ومصحف الحصري المعلّم، وثلاث قراءات برواية ورش
-• تنتقل التلاوة إلى الآية التالية تلقائيًا
+الوصف بالعربية
+
+تفتح عشرات التبويبات كل يوم، و«ذكّرني» يجعل كل تبويب منها لحظةً مع القرآن.
+
+في كل تبويب جديد آيةٌ بالرسم العثماني فوق صورة هادئة من الطبيعة. اضغط تشغيل لتسمعها، وافتح التفسير لتفهمها، وانظر كم بقي على الصلاة القادمة. وأثناء تصفّحك يصلك ذكرٌ قصير في الوقت الذي تختاره.
+
+━━ القرآن في كل تبويب ━━
+• آية جديدة في كل مرة، مع اسم السورة ورقم الآية
+• أكثر من عشرين قارئًا معروفًا تختار منهم
+• المرتّل والمجوّد، ومصحف الحصري المعلّم، وقراءات برواية ورش
+• استماع متواصل: تنتقل التلاوة إلى الآية التالية وحدها
 • التفسير الميسّر لكل آية بضغطة واحدة
 • انسخ الآية مع اسم سورتها
-• أكمل من آخر آية قرأتها إن شئت
+• أكمل من آخر آية قرأتها، أو اكتشف آية جديدة كل مرة
 
-🕌 مواقيت الصلاة
+━━ مواقيت الصلاة ━━
 • الصلوات الخمس مع عدّ تنازلي للصلاة القادمة
 • التاريخ الهجري والميلادي
-• اختر طريقة الحساب: المغرب، أم القرى، رابطة العالم الإسلامي، مصر، وغيرها
+• اختر طريقة الحساب المناسبة لبلدك
 
-🔔 تذكير بالأذكار
-• ذكرٌ قصير كل ٥ أو ١٥ أو ٣٠ أو ٦٠ دقيقة، أو المدة التي تختارها
-• أذكار الصباح والمساء، وأذكار بعد الصلاة، وأذكار النوم، وأدعية من القرآن، وأدعية الأنبياء، أو مزيج عشوائي
+━━ تذكير بالأذكار ━━
+• إشعار قصير كل ٥ أو ١٥ أو ٣٠ أو ٦٠ دقيقة، أو المدة التي تحددها
+• أذكار الصباح والمساء، وبعد الصلاة، والنوم، والاستيقاظ، وأدعية من القرآن، وأدعية الأنبياء، أو مزيج منها
 • أوقف التذكير ساعةً بضغطة واحدة
+• اطّلع على الذكر مباشرة من النافذة المنبثقة
 
-🌿 هدوء في التصميم
-• صور من الطبيعة تتحرك ببطء وتتغير وحدها
-• مظهر فاتح وداكن
-• واجهة عربية كاملة
+━━ هدوء في كل التفاصيل ━━
+• صور من الطبيعة: جبال وغابات وبحيرات وشلالات، تتحرك ببطء وتتبدل وحدها
+• واجهة عربية كاملة من اليمين إلى اليسار، بمظهر فاتح وداكن
+• اختصارات لوحة المفاتيح: المسافة للتشغيل · ← → للتنقل بين الآيات · T للتفسير · C للنسخ · B لصورة جديدة · S للإعدادات
 
-🔒 خصوصيتك محفوظة
-بلا حساب ولا إعلانات ولا تتبّع. تبقى إعداداتك في متصفحك، ويُستخدم موقعك لحساب مواقيت الصلاة فقط.
+━━ خصوصيتك أولًا ━━
+بلا حساب، ولا إعلانات، ولا تتبّع. تبقى إعداداتك في متصفحك، ولا يُستخدم موقعك إلا لحساب مواقيت الصلاة.
+
+مجاني، وهو صدقة جارية، فإن نفعك فلا تنسنا من صالح دعائك.
